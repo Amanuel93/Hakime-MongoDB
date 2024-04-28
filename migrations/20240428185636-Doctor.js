@@ -79,6 +79,10 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'not approved'
       },
+      step: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       completed: {
         type: Sequelize.STRING,
         defaultValue: 'No'

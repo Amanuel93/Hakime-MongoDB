@@ -84,6 +84,10 @@ const Doctor = sequelize.define('Doctor', {
     type: DataTypes.STRING,
     defaultValue:'not approved',
   },
+  step: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   completed: {
     type: DataTypes.STRING,
     defaultValue:'No',

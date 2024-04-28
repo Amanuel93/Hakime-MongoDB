@@ -100,10 +100,10 @@ async function Personal_Info(req, res, userId) {
 
       let doctor = await Doctor.findOne({ where: { userId } });
       if (doctor) {
-        doctor = await doctor.update({ gender, nationality, address, Bio, image: req.file.path });
+        doctor = await doctor.update({ gender,step, nationality, address, Bio, image: req.file.path });
         return res.status(200).json({ message: 'Doctor profile updated successfully', step, doctor });
       } else {
-        doctor = await Doctor.create({ userId, gender, nationality, address, Bio, image: req.file.path });
+        doctor = await Doctor.create({ userId, gender,step, nationality, address, Bio, image: req.file.path });
         return res.status(201).json({ message: 'Doctor profile created successfully', step, doctor });
       }
     });
@@ -124,10 +124,10 @@ async function Professional_Info(req, res, userId) {
 
     let doctor = await Doctor.findOne({ where: { userId } });
     if (doctor) {
-      doctor = await doctor.update({ medical_degrees, medical_school, year_of_graduation, specialization });
+      doctor = await doctor.update({ medical_degrees,step, medical_school, year_of_graduation, specialization });
       return res.status(200).json({ message: 'Doctor profile updated successfully', step, doctor });
     } else {
-      doctor = await Doctor.create({ userId, medical_degrees, medical_school, year_of_graduation, specialization });
+      doctor = await Doctor.create({ userId, medical_degrees,step, medical_school, year_of_graduation, specialization });
       return res.status(201).json({ message: 'Doctor profile created successfully', step, doctor });
     }
   } catch (error) {
@@ -156,6 +156,7 @@ async function Specialization_Info(req, res, userId) {
       if (doctor) {
         doctor = await doctor.update({
           medical_license_number,
+          step,
           certificates: req.files['certificates'].map(file => file.path),
           previous_work_experience,
           cv: req.files['cv'][0].path,
@@ -165,6 +166,7 @@ async function Specialization_Info(req, res, userId) {
         doctor = await Doctor.create({
           userId,
           medical_license_number,
+          step,
           certificates: req.files['certificates'].map(file => file.path),
           previous_work_experience,
           cv: req.files['cv'][0].path,
@@ -189,10 +191,10 @@ async function Identification_Info(req, res, userId) {
 
     let doctor = await Doctor.findOne({ where: { userId } });
     if (doctor) {
-      doctor = await doctor.update({ passport_or_national_id_no, language_spoken, proficiency_level });
+      doctor = await doctor.update({ passport_or_national_id_no,step,language_spoken, proficiency_level });
       return res.status(200).json({ message: 'Doctor profile updated successfully', step, doctor });
     } else {
-      doctor = await Doctor.create({ userId, passport_or_national_id_no, language_spoken, proficiency_level });
+      doctor = await Doctor.create({ userId, passport_or_national_id_no,step,language_spoken, proficiency_level });
       return res.status(201).json({ message: 'Doctor profile completed successfully', step, doctor });
     }
   } catch (error) {
