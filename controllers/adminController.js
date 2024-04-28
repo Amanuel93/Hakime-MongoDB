@@ -76,14 +76,11 @@ module.exports.approveDoctor = async (req, res) => {
   try {
     const {id} = req.params;
     // Check if the user exists
-    const user = await User.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
 
-    // Check if the user is already a patient
-    let doctor = await Doctor.findOne({ where: { userId: id } });
-    if (doctor) {
+    const doctor = await Doctor.findByPk(id);
+    if (doctor.status === 'active') {
+      return res.status(400).json({ message: "Doctor status cannot be updated because it's already approved." });
+    }else if(doctor) {
       // If the user is already a patient, update the profile
       doctor = await Doctor.update({ status: 'active' });
       return res.status(200).json({ message: 'Doctor is approved successfully'});
