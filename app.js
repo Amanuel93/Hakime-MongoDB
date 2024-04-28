@@ -8,6 +8,7 @@ const patientRoutes = require('./routes/patientRoute.js');
 const userRoutes = require('./routes/userRoutes.js');
 const scheduleRoutes = require('./routes/scheduleRoutes.js');
 const appointmentRoutes = require('./routes/appointmentRoutes.js');
+const adminRoute = require('./routes/adminRoute.js');
 
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use('/user', userRoutes);
 app.use('/post', postRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/Appointment', appointmentRoutes);
+app.use('/admin',adminRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

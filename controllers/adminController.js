@@ -5,15 +5,15 @@ const Doctor = require('../models/Doctor');
 
 module.exports.getPatientProfile = async (req, res) => {
   try {
-    const  decoded = req.userData;
-    const Id = decoded.id // Assuming you have user information stored in req.user after authentication
+    const {id} = req.params;
+    // Assuming you have user information stored in req.user after authentication
     // Check if the user exists
-    const user = await User.findByPk(Id);
+    const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     // Check if the user is already a patient
-    let patient = await Patient.findOne({ where: { userId: Id } });
+    let patient = await Patient.findOne({ where: { userId: id } });
     if (!patient) {
       return res.status(404).json({ message: 'Patient profile not found' });
     }
@@ -50,6 +50,7 @@ module.exports.getPatientProfile = async (req, res) => {
   }
 };
 
+
 module.exports.getAllPatient = async (req, res) => {
   try {
     let patient = await Patient.findAll();
@@ -69,4 +70,27 @@ module.exports.getAllDoctor = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   } 
 };
+
+
+module.exports.approveDoctor = async (req, res) => {
+  try {
+    const {id} = req.params;
+    // Check if the user exists
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the user is already a patient
+    let doctor = await Doctor.findOne({ where: { userId: id } });
+    if (doctor) {
+      // If the user is already a patient, update the profile
+      doctor = await Doctor.update({ status: 'active' });
+      return res.status(200).json({ message: 'Doctor is approved successfully'});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
