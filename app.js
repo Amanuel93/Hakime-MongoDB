@@ -21,8 +21,8 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/doctorProfile', doctorRoutes);
-app.use('/patientProfile', patientRoutes);
+app.use('/doctor', doctorRoutes);
+app.use('/patient', patientRoutes);
 app.use('/user', userRoutes);
 app.use('/post', postRoutes);
 app.use('/schedule', scheduleRoutes);

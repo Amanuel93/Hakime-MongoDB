@@ -14,12 +14,11 @@ module.exports.checkProfile = async(req, res, next) => {
                 message: "please, complete your profile to schedule!"
             });
         }else if(status !== 'active'){
-
             return res.status(401).json({
                 message: "please, wait for your approval !"
             });
         }
-        
+
         req.userData = {...req.useData,doctorId};
         next();
 

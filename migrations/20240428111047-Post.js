@@ -13,6 +13,10 @@ module.exports = {
       content: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.BLOB,
+        allowNull: true
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: {

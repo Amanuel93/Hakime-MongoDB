@@ -10,6 +10,10 @@ const Post = sequelize.define('Post', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  image: {
+    type: DataTypes.BLOB,
+    allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: true,
