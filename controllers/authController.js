@@ -68,3 +68,42 @@ module.exports.login = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// User update
+module.exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Get the authenticated user's ID from the request
+
+    // Fetch the user from the database
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update user data
+    const { name, phone_number, email, password } = req.body;
+
+    // Only update fields that are provided in the request body
+    if (name) user.name = name;
+    if (phone_number) user.phone_number = phone_number;
+    if (email) user.email = email;
+
+    // Hash the new password if provided
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    // Save the updated user data
+    await user.save();
+
+    // Generate JWT token
+    const token = generateToken(user);
+
+    // Return user data and token
+    res.status(200).json({ name: user.name, token });
+  } catch (error) {
+    console.error('Error during user profile update:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
