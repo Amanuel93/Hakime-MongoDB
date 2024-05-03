@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const http = require('http');
+const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes.js');
 const postRoutes = require('./routes/postRoutes.js');
@@ -14,6 +16,8 @@ const {createAdmin} = require('./controllers/userController.js');
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // Middleware
 // app.use(express.json());
@@ -28,6 +32,22 @@ app.use('/post', postRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/Appointment', appointmentRoutes);
 app.use('/admin',adminRoute); 
+
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  // Handle message reception
+  socket.on('message', (message) => {
+    // Process the received message
+    console.log('Message received:', message);
+  });
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+    // Perform cleanup or additional actions as needed
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 createAdmin();

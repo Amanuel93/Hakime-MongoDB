@@ -23,14 +23,14 @@ const Appointment = sequelize.define('Appointment', {
           key: 'id' // This is the field in the referenced model
         }
       },
-//    scheduleId: {
-//         type: DataTypes.INTEGER,
-//         allowNull: true,
-//         references: {
-//           model: Schedule, // This is the model that the foreign key references
-//           key: 'id' // This is the field in the referenced model
-//         }
-//       },
+   scheduleId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: Schedule, // This is the model that the foreign key references
+          key: 'id' // This is the field in the referenced model
+        }
+      },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -39,7 +39,6 @@ const Appointment = sequelize.define('Appointment', {
           key: 'id' // This is the field in the referenced model
         }
       },
-
     day: {
         type: DataTypes.STRING,
         allowNull: false
@@ -54,7 +53,11 @@ const Appointment = sequelize.define('Appointment', {
       },
 });
 
-Appointment.belongsTo(User, { foreignKey: 'doctorId' });
+Appointment.belongsTo(Doctor);
+Doctor.hasMany(Appointment, { foreignKey: 'doctorId' });
+
+Appointment.belongsTo(Patient);
+Patient.hasMany(Appointment, { foreignKey: 'patientId' });
 
 
 

@@ -1,32 +1,33 @@
-// const User = require('../models/User');
-// const Patient = require('../models/Patient');
-// const Doctor = require('../models/Doctor');
+// controllers/notificationController.js
+const Notification = require('../models/Notification');
 
-// module.exports.getNotification = async (req, res) => {
-//   try {
-//     const userId = req.user.id; // Assuming you have user information stored in req.user after authentication
-//     const { relevant_allergy, medical_history } = req.body;
+const sendNotification = async (req, res) => {
+  try {
+    const { content, senderId, receiverId } = req.body;
+    const notification = await Notification.create({ content, senderId, receiverId });
+    // Emit notification to connected clients using Socket.IO
+    io.emit('notification', notification);
+    res.status(201).json(notification);
+  } catch (error) {
+    console.error('Error sending notification:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
-//     // Check if the user exists
-//     const user = await User.findByPk(userId);
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
+const getNotificationsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const notifications = await Notification.findAll({
+      where: { receiverId: userId }
+    });
+    res.json(notifications);
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
-//     // Check if the user is already a patient
-//     let patient = await Patient.findOne({ where: { user_id: userId } });
-//     if (patient) {
-//       // If the user is already a patient, update the profile
-//       patient = await patient.update({ relevant_allergy, medical_history });
-//       return res.status(200).json({ message: 'Patient profile updated successfully', patient });
-//     }
-
-//     // If the user is not already a patient, create a new patient profile
-//     patient = await Patient.create({ user_id: userId, relevant_allergy, medical_history });
-//     res.status(201).json({ message: 'Patient profile completed successfully', patient });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
-
+module.exports = {
+  sendNotification,
+  getNotificationsByUser
+};
