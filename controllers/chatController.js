@@ -1,5 +1,6 @@
 // controllers/messageController.js
 const Chat = require('../models/Chat');
+const { Op } = require('sequelize');
 
 const sendMessage = async (req, res) => {
   try {

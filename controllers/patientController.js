@@ -58,6 +58,38 @@ module.exports.completePatientProfile = async (req, res) => {
       // res.status(200).json(doctor);
     };
 
+    module.exports.searchBy_name = async(req,res) => {
+      const { name } = req.query;
+      try {
+        const doctors = await Doctor.findAll({
+          where: {
+            [Op.or]: [
+              sequelize.where(sequelize.fn('LOWER', sequelize.col('Bio')), 'LIKE', '%' + name.toLowerCase() + '%')
+            ]
+          }
+        });
+        res.json(doctors);
+      } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+      }
+      }
+    
+    module.exports.searchBy_speciality = async(req,res) => {
+      const { specialty } = req.query;
+        try {
+          const doctors = await Doctor.findAll({
+            where: {
+              specialization: {
+                [Op.like]: '%' + specialty + '%'
+              }
+            }
+          });
+          res.json(doctors);
+        } catch (error) {
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      }
+
     
 
 

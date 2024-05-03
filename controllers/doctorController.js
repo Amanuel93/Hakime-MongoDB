@@ -3,6 +3,7 @@ const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
 const multer = require('multer');
 const path = require('path');
+const { Op } = require('sequelize');
 
 // Set up Multer storage for image uploads
 const imageStorage = multer.diskStorage({
@@ -202,6 +203,7 @@ async function Identification_Info(req, res, userId) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 
 
