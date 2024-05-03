@@ -28,7 +28,7 @@ module.exports.getAllUsers = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-
+//
  module.exports.createAdmin = async () => {
     try {
       // Check if an admin user already exists
@@ -37,7 +37,7 @@ module.exports.getAllUsers = async (req, res) => {
         console.log('Admin user already exists.');
         return;
       }
-
+      
       const password = "admin";
       const hashedPassword = await bcrypt.hash(password, 10);
   

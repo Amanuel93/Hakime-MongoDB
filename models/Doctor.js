@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const Doctor = sequelize.define('Doctor', {
   
-  //Personal_Information
+  // Personal_Information
   date_of_birth: {
     type: DataTypes.DATE,
     allowNull: false
@@ -30,7 +30,7 @@ const Doctor = sequelize.define('Doctor', {
     allowNull: false
   },
 
-  //Professional_Information
+  // Professional_Information
   medical_degrees: {
     type: DataTypes.STRING,
     allowNull: false
@@ -47,7 +47,7 @@ const Doctor = sequelize.define('Doctor', {
     type: DataTypes.STRING 
   },
 
-  //Specialization_Information
+  // Specialization_Information
   medical_license_number: {
     type: DataTypes.STRING,
     allowNull: false
@@ -65,7 +65,7 @@ const Doctor = sequelize.define('Doctor', {
     allowNull: false
   },
 
-  //Identification_Documents and Language_Proficiency
+  // Identification_Documents and Language_Proficiency
   passport_or_national_id_no: {
     type: DataTypes.STRING,
     allowNull: false
@@ -79,7 +79,7 @@ const Doctor = sequelize.define('Doctor', {
     allowNull: false
   },
 
-  //state of the table
+  // State of the table
   status: {
     type: DataTypes.STRING,
     defaultValue:'not approved',
@@ -98,6 +98,16 @@ const Doctor = sequelize.define('Doctor', {
     references: {
       model: User, // This is the model that the foreign key references
       key: 'id' // This is the field in the referenced model
+    }
+  }
+}, {
+  hooks: {
+    beforeValidate: (doctor) => {
+      const filledFields = Object.values(doctor.dataValues).filter(value => value !== null && value !== undefined);
+      const totalFields = Object.keys(doctor.dataValues).length - 1; // Excluding the userId field
+      if (filledFields.length === totalFields) {
+        doctor.completed = 'Yes';
+      }
     }
   }
 });
