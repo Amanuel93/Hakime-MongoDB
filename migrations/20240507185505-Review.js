@@ -1,8 +1,7 @@
-// migration file
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('Reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -29,16 +28,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      scheduleId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Schedules',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -49,16 +38,12 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      day: {
-        type: Sequelize.STRING,
+      review_text: {
+        type: Sequelize.TEXT,
         allowNull: false
       },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      time: {
-        type: Sequelize.TIME,
+      rating: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       createdAt: {
@@ -72,7 +57,8 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Appointments');
+    await queryInterface.dropTable('Reviews');
   }
 };
+
 

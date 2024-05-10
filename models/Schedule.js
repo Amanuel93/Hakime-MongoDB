@@ -51,6 +51,6 @@ const Schedule = sequelize.define('Schedule', {
 });
 
 Schedule.belongsTo(Doctor)
-Doctor.hasMany(Schedule,{foreignKey:'doctorId'})
+Doctor.hasMany(Schedule, {foreignKey:'doctorId'})
 
 module.exports = Schedule;

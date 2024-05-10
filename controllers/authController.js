@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
+const Patient = require('../models/Patient');
 
 // Generate JWT token
 const generateToken = (user) => {
@@ -31,6 +32,13 @@ module.exports.register = async (req, res) => {
       password: hashedPassword,
       role,
     });
+
+    if (role === 'patient') {
+      await Patient.create({
+        userId: user.id, // Use the user's ID as the foreign key in the patient table
+        // Other patient attributes
+      });
+    }
 
     // Generate JWT token
     const token = generateToken(user);

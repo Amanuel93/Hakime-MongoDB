@@ -1,8 +1,9 @@
 'use strict';
-
+/** @type {import('sequelize-cli').Migration} */
+const User = require('../models/User');
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Chats', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Posts', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,22 +11,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       content: {
-        type: Sequelize.TEXT,
-        allowNull: false
+        type: Sequelize.STRING
       },
-      senderId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
+      image: {
+        type: Sequelize.BLOB,
+        allowNull: true
       },
-      receiverId: {
+      userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
-          model: 'Users',
+          model: 'Users', // This is the name of the table referenced by userId
           key: 'id'
         }
       },
@@ -39,7 +34,8 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Chats');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Posts');
   }
 };
+

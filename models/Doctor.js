@@ -7,19 +7,19 @@ const Doctor = sequelize.define('Doctor', {
   // Personal_Information
   date_of_birth: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
   gender: {
     type: DataTypes.ENUM('Male', 'Female', 'Other'),
-    allowNull: false
+    allowNull: true
   },
   nationality: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   address: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   image: {
     type: DataTypes.BLOB,
@@ -27,21 +27,21 @@ const Doctor = sequelize.define('Doctor', {
   },
   Bio: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
 
   // Professional_Information
   medical_degrees: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   medical_school: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   year_of_graduation: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   specialization: {
     type: DataTypes.STRING 
@@ -50,33 +50,33 @@ const Doctor = sequelize.define('Doctor', {
   // Specialization_Information
   medical_license_number: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   certificate: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   previous_work_experience: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   cv: {
     type: DataTypes.BLOB,
-    allowNull: false
+    allowNull: true
   },
 
   // Identification_Documents and Language_Proficiency
   passport_or_national_id_no: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   language_spoken: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   proficiency_level: {
     type: DataTypes.ENUM('Basic', 'Intermediate', 'Advanced', 'Fluent'),
-    allowNull: false
+    allowNull: true
   },
 
   // State of the table
@@ -86,7 +86,7 @@ const Doctor = sequelize.define('Doctor', {
   },
   step: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   completed: {
     type: DataTypes.STRING,
@@ -94,22 +94,15 @@ const Doctor = sequelize.define('Doctor', {
   },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
     references: {
       model: User, // This is the model that the foreign key references
       key: 'id' // This is the field in the referenced model
     }
   }
-}, {
-  hooks: {
-    beforeValidate: (doctor) => {
-      const filledFields = Object.values(doctor.dataValues).filter(value => value !== null && value !== undefined);
-      const totalFields = Object.keys(doctor.dataValues).length - 1; // Excluding the userId field
-      if (filledFields.length === totalFields) {
-        doctor.completed = 'Yes';
-      }
-    }
-  }
 });
+
+User.hasOne(Doctor, { foreignKey: 'userId'});
+Doctor.belongsTo(User,{ foreignKey: 'userId'});
 
 module.exports = Doctor;

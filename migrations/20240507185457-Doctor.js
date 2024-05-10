@@ -12,41 +12,41 @@ module.exports = {
       // Personal_Information
       date_of_birth: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
       },
       gender: {
         type: Sequelize.ENUM('Male', 'Female', 'Other'),
-        allowNull: false
+        allowNull: true
       },
       nationality: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       image: {
         type: Sequelize.BLOB,
-        allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+        allowNull: true // Depending on your requirement, it can be allowNull: true if image is mandatory
       },
       Bio: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
 
       // Professional_Information
       medical_degrees: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       medical_school: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       year_of_graduation: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       specialization: {
         type: Sequelize.STRING 
@@ -55,33 +55,33 @@ module.exports = {
       // Specialization_Information
       medical_license_number: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       certificate: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: true
       },
       previous_work_experience: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: true
       },
       cv: {
         type: Sequelize.BLOB,
-        allowNull: false
+        allowNull: true
       },
 
       // Identification_Documents and Language_Proficiency
       passport_or_national_id_no: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       language_spoken: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       proficiency_level: {
         type: Sequelize.ENUM('Basic', 'Intermediate', 'Advanced', 'Fluent'),
-        allowNull: false
+        allowNull: true
       },
 
       // State of the table
@@ -91,7 +91,7 @@ module.exports = {
       },
       step: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       completed: {
         type: Sequelize.STRING,
@@ -119,14 +119,26 @@ module.exports = {
     await queryInterface.sequelize.query(`
     CREATE TRIGGER set_completed_trigger BEFORE INSERT ON Doctors FOR EACH ROW
     BEGIN
-      IF NEW.date_of_birth IS NOT NULL AND NEW.gender IS NOT NULL AND NEW.nationality IS NOT NULL AND 
-         NEW.address IS NOT NULL AND NEW.Bio IS NOT NULL AND NEW.medical_degrees IS NOT NULL AND
-         NEW.medical_school IS NOT NULL AND NEW.year_of_graduation IS NOT NULL AND NEW.medical_license_number IS NOT NULL AND 
-         NEW.certificate IS NOT NULL AND NEW.previous_work_experience IS NOT NULL AND NEW.cv IS NOT NULL AND 
-         NEW.passport_or_national_id_no IS NOT NULL AND NEW.language_spoken IS NOT NULL AND 
-         NEW.proficiency_level IS NOT NULL AND NEW.userId IS NOT NULL THEN
-        SET NEW.completed = 'Yes';
-      END IF;
+    IF NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '' AND 
+    NEW.gender IS NOT NULL AND NEW.gender != '' AND 
+    NEW.nationality IS NOT NULL AND NEW.nationality != '' AND 
+    NEW.address IS NOT NULL AND NEW.address != '' AND 
+    NEW.Bio IS NOT NULL AND NEW.Bio != '' AND 
+    NEW.medical_degrees IS NOT NULL AND NEW.medical_degrees != '' AND 
+    NEW.medical_school IS NOT NULL AND NEW.medical_school != '' AND 
+    NEW.year_of_graduation IS NOT NULL AND 
+    NEW.medical_license_number IS NOT NULL AND NEW.medical_license_number != '' AND 
+    NEW.certificate IS NOT NULL AND NEW.certificate != '' AND 
+    NEW.previous_work_experience IS NOT NULL AND NEW.previous_work_experience != '' AND 
+    NEW.cv IS NOT NULL AND NEW.cv != '' AND 
+    NEW.passport_or_national_id_no IS NOT NULL AND NEW.passport_or_national_id_no != '' AND 
+    NEW.language_spoken IS NOT NULL AND NEW.language_spoken != '' AND 
+    NEW.proficiency_level IS NOT NULL AND NEW.proficiency_level != '' AND 
+    NEW.userId IS NOT NULL THEN
+   SET NEW.completed = 'Yes';
+ ELSE
+   SET NEW.completed = 'No';
+ END IF;
     END;
   `);
   },
@@ -138,5 +150,6 @@ module.exports = {
     await queryInterface.dropTable('Doctors');
   }
 };
+
 
 
