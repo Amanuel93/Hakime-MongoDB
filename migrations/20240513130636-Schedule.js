@@ -18,43 +18,21 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      monday: {
+      day: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      tuesday: {
-        type: Sequelize.STRING,
+      date: {
+        type: Sequelize.DATE,
         allowNull: true
       },
-      wednesday: {
-        type: Sequelize.STRING,
+      initial_time: {
+        type:Sequelize.TIME,
         allowNull: true
       },
-      thursday: {
-        type: Sequelize.STRING,
+      final_time: {
+        type: Sequelize.TIME,
         allowNull: true
-      },
-      friday: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      saturday: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      sunday: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Users', // This should match the table name in your database
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
       },
       createdAt: {
         allowNull: false,
@@ -70,3 +48,4 @@ module.exports = {
     await queryInterface.dropTable('Schedules');
   }
 };
+

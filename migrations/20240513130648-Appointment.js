@@ -38,16 +38,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
       day: {
         type: Sequelize.STRING,
         allowNull: false
@@ -56,7 +46,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      time: {
+      initial_time: {
+        type: Sequelize.TIME,
+        allowNull: false
+      },
+      final_time: {
         type: Sequelize.TIME,
         allowNull: false
       },

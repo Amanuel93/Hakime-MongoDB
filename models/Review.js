@@ -2,11 +2,12 @@
 
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const Patient = require('../models/Patient');
+
 const Doctor = require('../models/Doctor');
+const {Doctor,Patient,User} = require('../models');
 
 const Review = sequelize.define('Review', {
-    patientId: {
+   patientId: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
@@ -14,11 +15,19 @@ const Review = sequelize.define('Review', {
           key: 'id' // This is the field in the referenced model
         }
       },
-  doctorId: {
+   doctorId: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
           model: Doctor, // This is the model that the foreign key references
+          key: 'id' // This is the field in the referenced model
+        }
+      },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: User, // This is the model that the foreign key references
           key: 'id' // This is the field in the referenced model
         }
       },
@@ -35,7 +44,7 @@ const Review = sequelize.define('Review', {
   Doctor.hasMany(Review, { foreignKey: 'doctorId' });
   Review.belongsTo(Doctor);
  
-  Patient.hasMany(Review, { foreignKey: 'patientId' });
-  Review.belongsTo(Patient);
+  User.hasMany(Review, { foreignKey: 'patientId' });
+  Review.belongsTo(User);
 
   module.exports = Review;

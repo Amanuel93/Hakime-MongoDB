@@ -34,10 +34,16 @@ module.exports.getDoctorProfile = async (req, res) => {
     const { id } = req.params;
     // Retrieve a single doctor with their associated user information and picture
     const doctor = await Doctor.findByPk(id, {
-      include: {
+      include: [
+        {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
       },
+      {
+        model: Schedule,
+        attributes: ['id','doctorId','monday', 'tuesday','wednesday', 'thursday','friday', 'saturday','sunday'], // Select only name and email from the User model
+       },
+    ],
     });
 
     if (!doctor) {
@@ -55,10 +61,16 @@ module.exports.getAllPatient = async (req, res) => {
   try {
     // Retrieve all patients with their associated user information and picture
     const patients = await Patient.findAll({
-      include: {
+      include: [
+        {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
-      },
+       },
+       {
+        model: Appointment,
+        attributes: [], // Select only name and email from the User model
+       },
+    ],
       attributes: ['id', 'image'], // Select patient ID and picture from the Patient model
       where: {
         // Add conditions if needed
@@ -79,10 +91,20 @@ module.exports.getAllDoctor = async (req, res) => {
   try {
     // Retrieve all doctors with their associated user information and picture
     const doctors = await Doctor.findAll({
-      include: {
+      include: [
+        {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
-      },
+      }, 
+      {
+        model: Schedule,
+        attributes: ['monday', 'tuesday','wednesday', 'thursday','friday', 'saturday','sunday'], // Select only name and email from the User model
+       },
+       {
+        model: Appointment,
+        attributes: [], // Select only name and email from the User model
+       },
+    ],
       where: {
         // Add conditions if needed
       }
@@ -122,7 +144,6 @@ module.exports.disapproveDoctor = async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found." });
     }
-
     if (doctor.status === 'not approved') {
       return res.status(400).json({ message: "Doctor status cannot be updated because it's already not approved." });
     }else {

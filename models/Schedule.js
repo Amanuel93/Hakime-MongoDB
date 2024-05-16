@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const User = require('../models/User');
 const Doctor = require('../models/Doctor');
 
 const Schedule = sequelize.define('Schedule', {
@@ -12,41 +11,21 @@ const Schedule = sequelize.define('Schedule', {
           key: 'id' // This is the field in the referenced model
         }
       },
-  monday: {
+  day: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  tuesday: {
-    type: DataTypes.STRING,
+  date: {
+    type: DataTypes.DATE,
     allowNull: true
   },
-  wednesday: {
-    type: DataTypes.STRING,
+  initial_time: {
+    type: DataTypes.TIME,
     allowNull: true
   },
-  thursday: {
-    type: DataTypes.STRING,
+  final_time: {
+    type: DataTypes.TIME,
     allowNull: true
-  },
-  friday: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  saturday: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  sunday: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: User, // This is the model that the foreign key references
-      key: 'id' // This is the field in the referenced model
-    }
   }
 });
 

@@ -3,7 +3,7 @@ const sequelize = require('../config/db'); // Assuming your Sequelize instance i
 const User = require('../models/User');
 
 const Doctor = sequelize.define('Doctor', {
-  
+
   // Personal_Information
   date_of_birth: {
     type: DataTypes.DATE,

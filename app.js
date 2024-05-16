@@ -33,9 +33,9 @@ app.use('/doctor', doctorRoutes);
 app.use('/patient', patientRoutes);
 app.use('/user', userRoutes);
 app.use('/post', postRoutes);
-// app.use('/schedule', scheduleRoutes);
-app.use('/Appointment', appointmentRoutes);
 app.use('/admin',adminRoute); 
+// app.use('/schedule', scheduleRoutes);
+// app.use('/Appointment', appointmentRoutes);
 
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);

@@ -1,45 +1,8 @@
-const User = require('../models/User');
-const Patient = require('../models/Patient');
-const Doctor = require('../models/Doctor');
-const Appointment = require('../models/Appointment');
-const Schedule = require('../models/Schedule');
+const {User,Patient,Doctor,Appointment,Schedule,Review} = require('../models');
 const multer = require('multer');
 const path = require('path');
 const { Op } = require('sequelize');
-// const { uploadImage, uploadDocuments } = require('../middleware/multerMiddleware');
-
-const imageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/images/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "__ " + path.extname(file.originalname));
-  }
-});
-
-// Multer upload instance for image
-const uploadImage = multer({ storage: imageStorage }).single('image');
-
-const uploadDocuments = (req, res, callback) => {
-  // Assuming you're using multer for file upload
-  const upload = multer({ dest: 'uploads/documents/' }).fields([
-    { name: 'certificate', maxCount: 10 },
-    { name: 'cv', maxCount: 1 }
-  ]);
-
-  upload(req, res, (err) => {
-    if (err) {
-      callback(err);
-    } else {
-      // Extract file paths from req.files object
-      const certificateFilePath = req.files['certificate'][0].path;
-      const cvFilePath = req.files['cv'][0].path;
-
-      // Pass the file paths to the callback function
-      callback(null, { certificateFilePath, cvFilePath });
-    }
-  });
-};
+const { uploadImage, uploadDocuments } = require('../middleware/multerMiddleware');
 
 module.exports.getDoctorProfile = async (req, res) => {
   try {
@@ -51,7 +14,7 @@ module.exports.getDoctorProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     // Check if the user is already a doctor
-    let doctor = await Doctor.findOne({ where: { userId: Id },include:[Appointment,Schedule] });
+    let doctor = await Doctor.findOne({ where: { userId: Id },include:[Appointment,Schedule,Review]});
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor profile not found' });
     }
@@ -100,7 +63,7 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    uploadImage(req, res, async function (err) {
+    uploadImage(req, res, async (err) => {
 
       console.log(req.body);
       const { date_of_birth,gender, nationality, address, Bio } = req.body;
@@ -127,7 +90,7 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
         let doctor = await Doctor.findOne({ where: { userId } });
 
         if (doctor) {
-          doctor = await doctor.update({ date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
+          doctor = await doctor.update({ date_of_birth,step,gender,nationality,address,Bio,image: req.file.filename });
           return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
         } else {
           doctor = await Doctor.create({ userId,date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
@@ -177,7 +140,7 @@ const Specialization_Info = async(req, res,step, userId) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    uploadDocuments(req, res, async function (err, fileData) {
+    uploadDocuments(req, res, async (err, fileData) => {
       console.log('Request Body:', req.body);
       console.log('File Data:', fileData);
       

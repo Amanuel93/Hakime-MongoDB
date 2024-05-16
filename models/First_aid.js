@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     source: DataTypes.STRING,
-    photo: DataTypes.STRING
+    image: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'First_Aid',
