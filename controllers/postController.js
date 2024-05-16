@@ -1,5 +1,5 @@
 // Example controller function to create a new post
-const Post = require('../models/post');
+const Post = require('../models/Post');
 const User = require('../models/User');
 
 module.exports.createPost = async (req, res) => {

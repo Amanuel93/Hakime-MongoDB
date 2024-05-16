@@ -1,7 +1,7 @@
 const User = require('../models/User');
-const Post = require('../models/post');
+const Post = require('../models/Post');
 const Schedule = require('../models/User');
-const Appointment = require('../models/post');
+const Appointment = require('../models/Post');
 const bcrypt = require('bcryptjs');
 
 module.exports.getAllUsers = async (req, res) => {
