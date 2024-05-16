@@ -32,8 +32,8 @@ app.use('/auth', authRoutes);
 app.use('/doctor', doctorRoutes);
 app.use('/patient', patientRoutes);
 app.use('/user', userRoutes);
-app.use('/post', postRoutes);
 app.use('/admin',adminRoute); 
+// app.use('/post', postRoutes);
 // app.use('/schedule', scheduleRoutes);
 // app.use('/Appointment', appointmentRoutes);
 

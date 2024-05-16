@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {completePatientProfile,getPatientProfile,searchBy_name,searchBy_speciality} = require('../controllers/patientController.js');
 const {setAppointment} = require('../controllers/appointmentController.js');
-const {createReview} = require('../controllers/reviewController.js');
 const  {checkAuth}  = require('../middleware/authMiddleware')
 const {createReview, getAllReviews,getReviewById,updateReview,deleteReview} = require('../controllers/reviewController');
 
