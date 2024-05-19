@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getPatientProfile,getDoctorProfile,getAllDoctor,getAllPatient,approveDoctor,disapproveDoctor} = require('../controllers/adminController.js');
+const {getPatientProfile,getDoctorProfile,getAllDoctor,getAllPatient,approveDoctor,disapproveDoctor,getApprovedDoctors,getnot_ApprovedDoctors} = require('../controllers/adminController.js');
 const {updateProfile} = require('../controllers/authController.js');
 const  {checkAuth}  = require('../middleware/authMiddleware')
 const { createFirstAid,getAllFirstAids, getFirstAidById, updateFirstAid,deleteFirstAid} =  require('../controllers/first_AidController.js');
@@ -11,6 +11,8 @@ router.get('/getAllDoctor',checkAuth,getAllDoctor);
 router.get('/getAllPatient',checkAuth, getAllPatient);
 router.get('/first_aids', getAllFirstAids);
 router.get('/first_aids/:id', getFirstAidById);
+router.get('/getApprovedDoctor',checkAuth,getApprovedDoctors);
+router.get('/getnot_ApprovedDoctor',checkAuth,getnot_ApprovedDoctors);
 
 router.post('/first_aids', createFirstAid);
 router.delete('/first_aids/:id', deleteFirstAid);

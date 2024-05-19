@@ -168,3 +168,17 @@ exports.getApprovedDoctors = async (req, res) => {
   }
 };
 
+exports.getnot_ApprovedDoctors = async (req, res) => {
+  try {
+    const approvedDoctors = await Doctor.findAll({
+      where: {
+        status: 'not approved'
+      }
+    });
+    res.status(200).json(approvedDoctors);
+  } catch (error) {
+    console.error('Error fetching approved doctors:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
