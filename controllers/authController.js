@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
 const Patient = require('../models/Patient');
+const Doctor = require('../models/Doctor');
+const { where } = require('sequelize');
 
 // Generate JWT token
 const generateToken = (user) => {
@@ -70,7 +72,14 @@ module.exports.login = async (req, res) => {
     // Return user data and token
     const Id = user.id
     req.user = Id;
-    res.status(200).json({ name: user.name ,role: user.role, token });
+    // res.status(200).json({ name: user.name ,role: user.role, token });
+    const doctor = await Doctor.findOne({where: {userId: Id}})
+    console.log(doctor.status)
+    if(user.role === 'doctor'){
+      res.status(200).json({ name: user.name ,role: user.role,status:doctor.status, token });
+    }else{
+      res.status(200).json({ name: user.name ,role: user.role, token });
+    }
   } catch (error) {
     console.error('Error during user login:', error);
     res.status(500).json({ error: 'Internal Server Error' });

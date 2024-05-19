@@ -14,7 +14,9 @@ module.exports.getDoctorProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     // Check if the user is already a doctor
-    let doctor = await Doctor.findOne({ where: { userId: Id },include:[Appointment,Schedule,Review]});
+    let doctor = await Doctor.findOne({ 
+      where: { userId: Id },include:[Appointment,Schedule,Review]
+    });
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor profile not found' });
     }
@@ -133,6 +135,7 @@ const Professional_Info = async(req, res,step, userId) => {
   }
 }
 
+
 const Specialization_Info = async(req, res,step, userId) => {
   try {
     const user = await User.findByPk(userId);
@@ -182,7 +185,6 @@ const Specialization_Info = async(req, res,step, userId) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
 
 const  Identification_Info = async(req, res,step, userId) => {
   try {

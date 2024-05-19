@@ -8,16 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      patientId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Patients',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
       doctorId: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -60,5 +50,4 @@ module.exports = {
     await queryInterface.dropTable('Reviews');
   }
 };
-
 

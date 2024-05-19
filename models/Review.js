@@ -3,18 +3,11 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
 
-const Doctor = require('../models/Doctor');
-const {Doctor,Patient,User} = require('../models');
+// const Doctor = require('../models/Doctor');
+const Doctor = require('./Doctor');
+const User = require('./User');
 
 const Review = sequelize.define('Review', {
-   patientId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: Patient, // This is the model that the foreign key references
-          key: 'id' // This is the field in the referenced model
-        }
-      },
    doctorId: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -41,10 +34,11 @@ const Review = sequelize.define('Review', {
     }
   });
 
-  Doctor.hasMany(Review, { foreignKey: 'doctorId' });
-  Review.belongsTo(Doctor);
- 
-  User.hasMany(Review, { foreignKey: 'patientId' });
-  Review.belongsTo(User);
+ // Define associations
+Doctor.hasMany(Review, { foreignKey: 'doctorId' });
+Review.belongsTo(Doctor, { foreignKey: 'doctorId' });
+
+User.hasMany(Review, { foreignKey: 'userId' });
+Review.belongsTo(User, { foreignKey: 'userId' });
 
   module.exports = Review;

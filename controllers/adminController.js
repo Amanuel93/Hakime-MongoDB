@@ -28,7 +28,7 @@ module.exports.getPatientProfile = async (req, res) => {
   }
 };
 
-  
+
 module.exports.getDoctorProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -83,8 +83,6 @@ module.exports.getAllPatient = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   } 
 };
-
-
     
 
 module.exports.getAllDoctor = async (req, res) => {

@@ -1,38 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('Schedules', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      patientId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Patients',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
       doctorId: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Doctors',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
-      scheduleId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Schedules',
+          model: 'Doctors', // This should match the table name in your database
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -40,19 +20,15 @@ module.exports = {
       },
       day: {
         type: Sequelize.STRING,
-        allowNull: false
-      },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
       },
       initial_time: {
-        type: Sequelize.TIME,
-        allowNull: false
+        type:Sequelize.TIME,
+        allowNull: true
       },
       final_time: {
         type: Sequelize.TIME,
-        allowNull: false
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -65,8 +41,7 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Appointments');
+    await queryInterface.dropTable('Schedules');
   }
 };
-
 

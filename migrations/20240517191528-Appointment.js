@@ -1,18 +1,28 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Schedules', {
+    await queryInterface.createTable('Appointments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      patientId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Patients',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       doctorId: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Doctors', // This should match the table name in your database
+          model: 'Doctors',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -20,19 +30,19 @@ module.exports = {
       },
       day: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false
       },
       date: {
         type: Sequelize.DATE,
-        allowNull: true
+        allowNull: false
       },
       initial_time: {
-        type:Sequelize.TIME,
-        allowNull: true
+        type: Sequelize.TIME,
+        allowNull: false
       },
       final_time: {
         type: Sequelize.TIME,
-        allowNull: true
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -45,7 +55,8 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Schedules');
+    await queryInterface.dropTable('Appointments');
   }
 };
+
 

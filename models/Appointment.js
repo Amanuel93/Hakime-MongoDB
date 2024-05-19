@@ -31,14 +31,6 @@ const Appointment = sequelize.define('Appointment', {
           key: 'id' // This is the field in the referenced model
         }
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: User, // This is the model that the foreign key references
-          key: 'id' // This is the field in the referenced model
-        }
-      },
     day: {
         type: DataTypes.STRING,
         allowNull: false

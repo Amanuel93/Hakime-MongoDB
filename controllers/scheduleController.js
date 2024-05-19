@@ -1,41 +1,37 @@
 'use strict';
 
 const { Op } = require('sequelize');
+const moment = require('moment');
 const Schedule = require('../models/Schedule');
 
 // Function to convert time in meridian format to 24-hour format
 const convertTo24Hour = (time) => {
-  const [hours, minutes] = time.split(':');
-  let hour = parseInt(hours);
-  const isPM = /PM/i.test(time);
-  if (isPM && hour < 12) hour += 12;
-  if (!isPM && hour === 12) hour = 0;
-  return `${hour.toString().padStart(2, '0')}:${minutes}`;
+  return moment(time, ["h:mm A"]).format("HH:mm");
 };
 
 module.exports.setDoctorSchedule = async (req, res) => {
   try {
     const { doctorId } = req.userData;
-    const { day, date, initial_time, final_time } = req.body;
+    const { day, initial_time, final_time } = req.body;
 
     // Convert initial_time and final_time to 24-hour format
     const initialTime24Hour = convertTo24Hour(initial_time);
     const finalTime24Hour = convertTo24Hour(final_time);
 
-    console.log('Date:', date);
     console.log('Initial time (24-hour format):', initialTime24Hour);
     console.log('Final time (24-hour format):', finalTime24Hour);
 
     // Combine date and time for new initial time and final time
-    const [year, month, dayOfMonth] = date.split('-'); // Split the date string into year, month, and day
-    const initialTimeParts = initialTime24Hour.split(':'); // Split the initial time string into hours and minutes
-    const finalTimeParts = finalTime24Hour.split(':'); // Split the final time string into hours and minutes
+    const newInitialTime = moment(`1970-01-01T${initialTime24Hour}:00Z`).toDate();
+    const newFinalTime = moment(`1970-01-01T${finalTime24Hour}:00Z`).toDate();
 
-    const newInitialTime = new Date(year, month - 1, dayOfMonth, parseInt(initialTimeParts[0]), parseInt(initialTimeParts[1]));
-    const newFinalTime = new Date(year, month - 1, dayOfMonth, parseInt(finalTimeParts[0]), parseInt(finalTimeParts[1]));
-
+    // Log the new times to debug
     console.log('New initial time:', newInitialTime);
     console.log('New final time:', newFinalTime);
+
+    if (isNaN(newInitialTime) || isNaN(newFinalTime)) {
+      return res.status(400).json({ message: 'Invalid time format provided' });
+    }
 
     // Calculate the time difference between the initial time and final time for the new schedule
     const newTimeDifference = (newFinalTime - newInitialTime) / (1000 * 60); // Convert milliseconds to minutes
@@ -47,37 +43,51 @@ module.exports.setDoctorSchedule = async (req, res) => {
       return res.status(400).json({ message: 'The time difference between initial time and final time should be at least 30 minutes' });
     }
 
-    console.log('Before existingSchedules query');
-    
-   
-    const dateWithTime = `${date} 00:00:00`;
-
-    // Check if there's already a schedule for the same day and date
+    // Check if there's already a schedule for the same day
     const existingSchedules = await Schedule.findAll({
       where: {
         doctorId,
-        day,
-        date  // Include time component to match database format
+        day
       },
       order: [['initial_time', 'ASC']] // Order schedules by initial_time
     });
 
-    console.log(dateWithTime)
-    // console.log('Existings schedules:', existingsSchedules)
-
-    console.log('After existingSchedules query');
     console.log('Existing schedules:', existingSchedules);
 
-    if (existingSchedules.length > 0) {
-      // Check if the new schedule violates the time difference constraints with existing schedules
-      const lastSchedule = existingSchedules[existingSchedules.length - 1];
-      const lastFinalTime = new Date(date + 'T' + lastSchedule.final_time);
-      const timeGap = (newInitialTime - lastFinalTime) / (1000 * 60); // Calculate time gap in minutes
+    // Check if the new schedule violates the time difference constraints with existing schedules
+    for (const schedule of existingSchedules) {
+      // Log schedule for debugging
+      console.log('Existing schedule:', schedule);
+      console.log('Existing initial time (raw):', schedule.initial_time);
+      console.log('Existing final time (raw):', schedule.final_time);
 
-      console.log('Last final time:', lastFinalTime);
-      console.log('Time gap (minutes):', timeGap);
+      // Parse existing initial and final times
+      const existingInitialTime = moment(`1970-01-01T${schedule.initial_time}`).toDate();
+      const existingFinalTime = moment(`1970-01-01T${schedule.final_time}`).toDate();
 
-      if (timeGap < 30) {
+      console.log('Existing initial time:', existingInitialTime);
+      console.log('Existing final time:', existingFinalTime);
+
+      if (isNaN(existingInitialTime) || isNaN(existingFinalTime)) {
+        console.error('Error parsing existing schedule times:', schedule);
+        continue; // Skip this schedule if parsing failed
+      }
+
+      // Check for overlapping schedules
+      if (
+        (newInitialTime < existingFinalTime && newFinalTime > existingInitialTime) // Simplified overlap condition
+      ) {
+        return res.status(400).json({ message: 'Schedule times overlap with an existing schedule' });
+      }
+
+      // Check for 30-minute gap between schedules
+      const gapBefore = (newInitialTime - existingFinalTime) / (1000 * 60);
+      const gapAfter = (existingInitialTime - newFinalTime) / (1000 * 60);
+
+      console.log('Gap before (minutes):', gapBefore);
+      console.log('Gap after (minutes):', gapAfter);
+
+      if ((gapBefore > 0 && gapBefore < 30) || (gapAfter > 0 && gapAfter < 30)) {
         return res.status(400).json({ message: 'There must be at least 30 minutes between consecutive schedules' });
       }
     }
@@ -86,7 +96,6 @@ module.exports.setDoctorSchedule = async (req, res) => {
     await Schedule.create({
       doctorId,
       day,
-      date,
       initial_time: initialTime24Hour,
       final_time: finalTime24Hour
     });
