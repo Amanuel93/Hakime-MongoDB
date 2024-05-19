@@ -154,4 +154,17 @@ module.exports.disapproveDoctor = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+exports.getApprovedDoctors = async (req, res) => {
+  try {
+    const approvedDoctors = await Doctor.findAll({
+      where: {
+        status: 'approved'
+      }
+    });
+    res.status(200).json(approvedDoctors);
+  } catch (error) {
+    console.error('Error fetching approved doctors:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 

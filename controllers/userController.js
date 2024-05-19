@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
+const Doctor  = require('../models/Doctor');
 const Schedule = require('../models/User');
 const Appointment = require('../models/Post');
 const bcrypt = require('bcryptjs');
@@ -55,6 +56,8 @@ module.exports.getAllUsers = async (req, res) => {
       console.error('Error creating admin user:', error);
     }
   }
+
+  
   
 
 
