@@ -15,7 +15,21 @@ module.exports.getDoctorProfile = async (req, res) => {
     }
     // Check if the user is already a doctor
     let doctor = await Doctor.findOne({ 
-      where: { userId: Id },include:[Appointment,Schedule,Review]
+      where: { userId: Id },include:
+      [
+        {
+        model: User,
+        attributes: ['name', 'email'], // Select only name and email from the User model
+      }, 
+      {
+        model: Schedule,
+        attributes: ['day', 'initial_time','final_time'], // Select only name and email from the User model
+       },
+       {
+        model: Appointment,
+        attributes: [], // Select only name and email from the User model
+       },
+    ],
     });
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor profile not found' });
