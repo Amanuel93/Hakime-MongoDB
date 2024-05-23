@@ -50,7 +50,7 @@ module.exports.setDoctorSchedule = async (req, res) => {
         day
       },
       order: [['initial_time', 'ASC']] // Order schedules by initial_time
-    });
+    }); 
 
     console.log('Existing schedules:', existingSchedules);
 

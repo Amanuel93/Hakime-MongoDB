@@ -34,7 +34,6 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
 
     const step = parseInt(req.params.step);
     // const {step} = req.params
-
     switch (step) {
       case 1:
         await Personal_Info(req, res,step, userId);
@@ -92,7 +91,7 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
         let doctor = await Doctor.findOne({ where: { userId } });
 
         if (doctor) {
-          doctor = await doctor.update({ date_of_birth,step,gender,nationality,address,Bio,image: req.file.filename });
+          doctor = await doctor.update({ date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
           return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
         } else {
           doctor = await Doctor.create({ userId,date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
