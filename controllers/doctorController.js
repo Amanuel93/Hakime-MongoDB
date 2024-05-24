@@ -148,7 +148,6 @@ const Professional_Info = async(req, res,step, userId) => {
   }
 }
 
-
 const Specialization_Info = async(req, res,step, userId) => {
   try {
     const user = await User.findByPk(userId);

@@ -114,7 +114,6 @@ module.exports.getAllDoctor = async (req, res) => {
   } 
 };
 
-
 module.exports.approveDoctor = async (req, res) => {
   try {
     const {id} = req.params;
@@ -154,7 +153,7 @@ module.exports.disapproveDoctor = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-exports.getApprovedDoctors = async (req, res) => {
+module.exports.getApprovedDoctors = async (req, res) => {
   try {
     const approvedDoctors = await Doctor.findAll({
       where: {
@@ -168,7 +167,7 @@ exports.getApprovedDoctors = async (req, res) => {
   }
 };
 
-exports.getnot_ApprovedDoctors = async (req, res) => {
+module.exports.getnot_ApprovedDoctors = async (req, res) => {
   try {
     const approvedDoctors = await Doctor.findAll({
       where: {
@@ -181,4 +180,35 @@ exports.getnot_ApprovedDoctors = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+module.exports.countDoctors = async (req, res) => {
+  try {
+    const totalDoctors = await Doctor.count();
+    const approvedDoctors = await Doctor.count({ where: { status: 'approved' } });
+    const notApprovedDoctors = await Doctor.count({ where: { status: 'not approved' } });
+
+    res.status(200).json({
+      total: totalDoctors,
+      approved: approvedDoctors,
+      notApproved: notApprovedDoctors
+    });
+  } catch (error) {
+    console.error('Error counting doctors:', error);
+    res.status(500).json({ error: 'An error occurred while counting doctors' });
+  }
+};
+
+module.exports.countPatients = async (req, res) => {
+  try {
+    const totalPatients = await Patient.count();
+
+    res.status(200).json({
+      total: totalPatients,
+    });
+  } catch (error) {
+    console.error('Error counting patient:', error);
+    res.status(500).json({ error: 'An error occurred while counting patients' });
+  }
+};
+
 

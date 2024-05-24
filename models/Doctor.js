@@ -46,6 +46,10 @@ const Doctor = sequelize.define('Doctor', {
   specialization: {
     type: DataTypes.STRING 
   },
+  hourly_price:{
+    type:DataTypes.STRING,
+    allowNull: true
+  },
 
   // Specialization_Information
   medical_license_number: {

@@ -19,6 +19,6 @@ router.put('/reviews/:reviewId', checkAuth, updateReview);
 router.delete('/reviews/:reviewId', checkAuth, deleteReview);
 
 router.get('/getDoctor/:id',checkAuth, getDoctorProfile);
-router.get('/getAllDoctor',checkAuth,getApprovedDoctors);
+router.get('/getAllDoctor',getApprovedDoctors);
 
 module.exports = router;
