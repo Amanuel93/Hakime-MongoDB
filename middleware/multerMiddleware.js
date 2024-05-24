@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
+// Image storage configuration
 const imageStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/images/');
@@ -9,31 +10,18 @@ const imageStorage = multer.diskStorage({
       cb(null, Date.now() + "__ " + path.extname(file.originalname));
     }
   });
+
+  const documentStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/documents/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + "__" + path.extname(file.originalname));
+    }
+  });
   
   // Multer upload instance for image
-  module.exports.uploadImage = multer({ storage: imageStorage }).fields([
-    { name: 'image', maxCount: 1 },
-    { name: 'Id_Image', maxCount: 1 },
-    { name: 'cvImage', maxCount: 1 }
-  ]);
-  
-  module.exports.uploadDocuments = (req, res, callback) => {
-    // Assuming you're using multer for file upload
-    const upload = multer({ dest: 'uploads/documents/' }).fields([
-      { name: 'certificate', maxCount: 10 },
-      { name: 'cv', maxCount: 1 }
-    ]);
-  
-    upload(req, res, (err) => {
-      if (err) {
-        callback(err);
-      } else {
-        // Extract file paths from req.files object
-        const certificateFilePath = req.files['certificate'][0].filename;
-        const cvFilePath = req.files['cv'][0].filename;
-  
-        // Pass the file paths to the callback function
-        callback(null, { certificateFilePath, cvFilePath });
-      }
-    });
-  };
+  module.exports.uploadImage = multer({ storage: imageStorage }).single('image');
+  module.exports.uploadId_Image = multer({ storage: imageStorage }).single('Id_Image');
+  module.exports.uploadCV = multer({ storage: documentStorage }).single('cv');
+  module.exports.uploadCertificate = multer({ storage: documentStorage }).single('certificate');

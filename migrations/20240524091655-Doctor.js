@@ -120,14 +120,14 @@ module.exports = {
     });
 
     // Adding hook for setting completed field
-//     await queryInterface.sequelize.query(`
-//     CREATE TRIGGER set_completed_trigger BEFORE INSERT ON Doctors FOR EACH ROW
-//     BEGIN
-//     IF NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '' AND 
-//     NEW.gender IS NOT NULL AND NEW.gender != '' AND 
-//     NEW.nationality IS NOT NULL AND NEW.nationality != '' AND 
-//     NEW.address IS NOT NULL AND NEW.address != '' AND 
-//     NEW.Bio IS NOT NULL AND NEW.Bio != '' AND 
+    await queryInterface.sequelize.query(`
+// //     CREATE TRIGGER set_completed_trigger BEFORE INSERT ON Doctors FOR EACH ROW
+// //     BEGIN
+// //     IF NEW.date_of_birth IS NOT NULL AND NEW.date_of_birth != '' AND 
+// //     NEW.gender IS NOT NULL AND NEW.gender != '' AND 
+// //     NEW.nationality IS NOT NULL AND NEW.nationality != '' AND 
+// //     NEW.address IS NOT NULL AND NEW.address != '' AND 
+// //     NEW.Bio IS NOT NULL AND NEW.Bio != '' AND 
 //     NEW.medical_degrees IS NOT NULL AND NEW.medical_degrees != '' AND 
 //     NEW.medical_school IS NOT NULL AND NEW.medical_school != '' AND 
 //     NEW.year_of_graduation IS NOT NULL AND 

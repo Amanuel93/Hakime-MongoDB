@@ -46,10 +46,6 @@ const Doctor = sequelize.define('Doctor', {
   specialization: {
     type: DataTypes.STRING 
   },
-  hourly_price:{
-    type:DataTypes.STRING,
-    allowNull: true
-  },
 
   // Specialization_Information
   medical_license_number: {
@@ -57,11 +53,11 @@ const Doctor = sequelize.define('Doctor', {
     allowNull: true
   },
   hourly_rate: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true
   },
   certificate: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true
   },
   previous_work_experience: {
@@ -85,6 +81,10 @@ const Doctor = sequelize.define('Doctor', {
   proficiency_level: {
     type: DataTypes.ENUM('Basic', 'Intermediate', 'Advanced', 'Fluent'),
     allowNull: true
+  },
+  Id_Image: {
+    type: DataTypes.BLOB,
+    allowNull: true // Depending on your requirement, it can be allowNull: true if image is mandatory
   },
 
   // State of the table

@@ -74,9 +74,9 @@ module.exports.login = async (req, res) => {
     req.user = Id;
     // res.status(200).json({ name: user.name ,role: user.role, token });
     const doctor = await Doctor.findOne({where: {userId: Id}})
-    console.log(doctor.status)
-    if(user.role === 'doctor'){
-      res.status(200).json({ name: user.name ,role: user.role,status:doctor.status, token });
+   
+    if(doctor && user.role === 'doctor'){
+      res.status(200).json({ name: user.name ,role: user.role,status: doctor.status, token });
     }else{
       res.status(200).json({ name: user.name ,role: user.role, token });
     }
