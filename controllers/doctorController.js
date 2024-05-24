@@ -111,10 +111,10 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
 
         if (doctor) {
           doctor = await doctor.update({ date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
-          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor,success:true });
         } else {
           doctor = await Doctor.create({ userId,date_of_birth,step,gender,nationality,address,Bio,image: req.file.path });
-          return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+          return res.status(201).json({ message: 'Doctor profile created successfully', doctor,success:true });
         }
       } catch (error) {
         console.error(error);
@@ -162,7 +162,7 @@ const Professional_Info = async (req, res, step, userId) => {
             step,
             certificate: certificatePath
           });
-          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor,success:true });
         } else {
           doctor = await Doctor.create({
             userId,
@@ -173,7 +173,7 @@ const Professional_Info = async (req, res, step, userId) => {
             step,
             certificate: certificatePath
           });
-          return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+          return res.status(201).json({ message: 'Doctor profile created successfully', doctor,success:true });
         }
       } catch (error) {
         console.error(error);
@@ -217,7 +217,8 @@ const Specialization_Info = async (req, res, step, userId) => {
             step,
             cv: cvFilePath
           });
-          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+
+          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor,success:true });
         } else {
           doctor = await Doctor.create({
             userId,
@@ -227,7 +228,7 @@ const Specialization_Info = async (req, res, step, userId) => {
             step,
             cv: cvFilePath
           });
-          return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+          return res.status(201).json({ message: 'Doctor profile created successfully', doctor,success:true });
         }
       } catch (error) {
         console.error(error);
@@ -287,10 +288,10 @@ const Identification_Info = async (req, res,step, userId) => {
 
         if (doctor) {
           doctor = await doctor.update({ passport_or_national_id_no,step,language_spoken,proficiency_level,Id_Image: req.file.path });
-          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor,success:true });
         } else {
           doctor = await Doctor.create({ userId,passport_or_national_id_no,step,language_spoken,proficiency_level,Id_Image: req.file.path });
-          return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+          return res.status(201).json({ message: 'Doctor profile created successfully', doctor,success:true });
         }
       } catch (error) {
         console.error(error);
