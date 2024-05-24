@@ -11,7 +11,11 @@ const imageStorage = multer.diskStorage({
   });
   
   // Multer upload instance for image
-  module.exports.uploadImage = multer({ storage: imageStorage }).single('image');
+  module.exports.uploadImage = multer({ storage: imageStorage }).fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'Id_Image', maxCount: 1 },
+    { name: 'cvImage', maxCount: 1 }
+  ]);
   
   module.exports.uploadDocuments = (req, res, callback) => {
     // Assuming you're using multer for file upload

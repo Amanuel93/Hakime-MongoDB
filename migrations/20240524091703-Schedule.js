@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Reviews', {
+    await queryInterface.createTable('Schedules', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,29 +12,19 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Doctors',
+          model: 'Doctors', // This should match the table name in your database
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+      day: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
-      review_text: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      },
-      rating: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+      time: {
+        type:Sequelize.TIME,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -47,7 +37,7 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Reviews');
+    await queryInterface.dropTable('Schedules');
   }
 };
 

@@ -56,6 +56,10 @@ const Doctor = sequelize.define('Doctor', {
     type: DataTypes.STRING,
     allowNull: true
   },
+  hourly_rate: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   certificate: {
     type: DataTypes.TEXT,
     allowNull: true
@@ -91,10 +95,6 @@ const Doctor = sequelize.define('Doctor', {
   step: {
     type: DataTypes.INTEGER,
     allowNull: true,
-  },
-  completed: {
-    type: DataTypes.STRING,
-    defaultValue:'No',
   },
   userId: {
     type: DataTypes.INTEGER,

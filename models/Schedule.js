@@ -15,11 +15,7 @@ const Schedule = sequelize.define('Schedule', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  initial_time: {
-    type: DataTypes.TIME,
-    allowNull: true
-  },
-  final_time: {
+  time: {
     type: DataTypes.TIME,
     allowNull: true
   }

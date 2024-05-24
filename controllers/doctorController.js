@@ -29,6 +29,10 @@ module.exports.getDoctorProfile = async (req, res) => {
         model: Appointment,
         attributes: [], // Select only name and email from the User model
        },
+       {
+        model: Review,
+        attributes: ['review_text','rating'], // Select only name and email from the User model
+       },
     ],
     });
     if (!doctor) {
@@ -159,8 +163,8 @@ const Specialization_Info = async(req, res,step, userId) => {
       console.log('Request Body:', req.body);
       console.log('File Data:', fileData);
       
-      const { medical_license_number, previous_work_experience } = req.body;
-      const { certificateFilePath, cvFilePath } = fileData;
+      const { medical_license_number, previous_work_experience,hrRate } = req.body;
+      const {cvFilePath,certificatePath } = fileData;
       console.log('medical_license_number:', medical_license_number);
       console.log('previous_work_experience:', previous_work_experience);
 
@@ -175,8 +179,8 @@ const Specialization_Info = async(req, res,step, userId) => {
         doctor = await doctor.update({
           medical_license_number,
           previous_work_experience,
+          hourly_rate:hrRate,
           step,
-          certificate: certificateFilePath,
           cv: cvFilePath
         });
         return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
@@ -186,7 +190,7 @@ const Specialization_Info = async(req, res,step, userId) => {
           medical_license_number,
           previous_work_experience,
           step,
-          certificate: certificateFilePath,
+          certificate:certificatePath,
           cv: cvFilePath
         });
         return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
@@ -198,40 +202,71 @@ const Specialization_Info = async(req, res,step, userId) => {
   }
 }
 
-const  Identification_Info = async(req, res,step, userId) => {
+// const  Identification_Info = async(req, res,step, userId) => {
+//   try {
+//     const { passport_or_national_id_no, language_spoken, proficiency_level } = req.body;
+
+//     const user = await User.findByPk(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     let doctor = await Doctor.findOne({ where: { userId } });
+//     if (doctor) {
+//       doctor = await doctor.update({ passport_or_national_id_no,step,language_spoken, proficiency_level });
+//       return (res.status(200).json({ message: 'Doctor profile updated successfully', doctor }));
+//     } else {
+//       doctor = await Doctor.create({ userId, passport_or_national_id_no,step,language_spoken, proficiency_level });
+//       return (res.status(201).json({ message: 'Doctor profile completed successfully', doctor }));
+//       // return validateDoctorAttributes(doctor)
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// }
+
+const Identification_Info = async (req, res,step, userId) => {
   try {
-    const { passport_or_national_id_no, language_spoken, proficiency_level } = req.body;
 
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    let doctor = await Doctor.findOne({ where: { userId } });
-    if (doctor) {
-      doctor = await doctor.update({ passport_or_national_id_no,step,language_spoken, proficiency_level });
-      return (res.status(200).json({ message: 'Doctor profile updated successfully', doctor }));
-    } else {
-      doctor = await Doctor.create({ userId, passport_or_national_id_no,step,language_spoken, proficiency_level });
-      return (res.status(201).json({ message: 'Doctor profile completed successfully', doctor }));
-      // return validateDoctorAttributes(doctor)
-    }
+    uploadImage(req, res, async (err) => {
+
+      console.log(req.body);
+      const { passport_or_national_id_no, language_spoken, proficiency_level  } = req.body;
+
+
+      if (err instanceof multer.MulterError) {
+        return res.status(400).json({ message: 'Image upload error', error: err });
+      } else if (err) {
+        return res.status(500).json({ message: 'Internal server error', error: err });
+      }
+
+      try {
+        let doctor = await Doctor.findOne({ where: { userId } });
+
+        if (doctor) {
+          doctor = await doctor.update({ passport_or_national_id_no,step,language_spoken,proficiency_level,Id_Image: req.file.path });
+          return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+        } else {
+          doctor = await Doctor.create({ userId,passport_or_national_id_no,step,language_spoken,proficiency_level,Id_Image: req.file.path });
+          return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error while updating or creating doctor profile' });
+      }
+    });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
-// async function validateDoctorAttributes(doctor) {
-//   const attributes = Object.values(doctor.dataValues);
-//   for (const attribute of attributes) {
-//     // Check if the attribute is null or an empty string
-//     if (attribute === null || attribute === '') {
-//       return false; // Return false if any attribute is null or an empty string
-//     }
-//   }
-//   return true; // Return true if all attributes have values
-// }
 
 
 

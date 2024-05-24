@@ -3,6 +3,7 @@ const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
 const Schedule = require('../models/Schedule');
 const Appointment = require('../models/Appointment');
+const Review = require('../models/Review');
 
 
 module.exports.getPatientProfile = async (req, res) => {
@@ -41,7 +42,11 @@ module.exports.getDoctorProfile = async (req, res) => {
       },
       {
         model: Schedule,
-        attributes: ['id','doctorId','monday', 'tuesday','wednesday', 'thursday','friday', 'saturday','sunday'], // Select only name and email from the User model
+        attributes: ['id'], // Select only name and email from the User model
+       },
+       {
+        model: Review,
+        attributes: ['review_text','rating'], // Select only name and email from the User model
        },
     ],
     });
