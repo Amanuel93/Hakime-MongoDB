@@ -127,30 +127,83 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
   }
 }
 
+// const Professional_Info = async(req, res,step, userId) => {
+//   try {
+//     console.log(req.body);
+//     const { medical_degrees, medical_school, year_of_graduation, specialization } = req.body;
+
+//     const user = await User.findByPk(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     let doctor = await Doctor.findOne({ where: { userId } });
+//     if (doctor) {
+//       // const { medical_degrees, medical_school, year_of_graduation, specialization } = req.body;
+//       doctor = await doctor.update({ medical_degrees,step, medical_school, year_of_graduation, specialization });
+//       return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+//     } else {
+//       doctor = await Doctor.create({ userId, medical_degrees,step, medical_school, year_of_graduation, specialization });
+//       return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// }
+
+
 const Professional_Info = async(req, res,step, userId) => {
   try {
-    console.log(req.body);
-    const { medical_degrees, medical_school, year_of_graduation, specialization } = req.body;
-
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    let doctor = await Doctor.findOne({ where: { userId } });
-    if (doctor) {
-      // const { medical_degrees, medical_school, year_of_graduation, specialization } = req.body;
-      doctor = await doctor.update({ medical_degrees,step, medical_school, year_of_graduation, specialization });
-      return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
-    } else {
-      doctor = await Doctor.create({ userId, medical_degrees,step, medical_school, year_of_graduation, specialization });
-      return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
-    }
+    uploadDocuments(req, res, async (err, fileData) => {
+      console.log('Request Body:', req.body);
+      console.log('File Data:', fileData);
+      
+      const {medical_degrees, medical_school, year_of_graduation, specialization } = req.body;
+      const {certificatePath } = fileData;
+      console.log('medical_license_number:', medical_license_number);
+      console.log('previous_work_experience:', previous_work_experience);
+
+      if (err instanceof multer.MulterError) {
+        return res.status(400).json({ message: 'Document upload error', error: err });
+      } else if (err) {
+        return res.status(500).json({ message: 'Internal server error', error: err });
+      }
+      let doctor = await Doctor.findOne({ where: { userId } });
+      if (doctor) {
+        doctor = await doctor.update({
+          medical_degrees,
+          medical_school,
+          year_of_graduation,
+          specialization,
+          step,
+          certificate:certificatePath
+        });
+        return res.status(200).json({ message: 'Doctor profile updated successfully', doctor });
+      } else {
+        doctor = await Doctor.create({
+          userId,
+          medical_license_number,
+          previous_work_experience,
+          step,
+          certificate:certificatePath,
+          cv: cvFilePath
+        });
+        return res.status(201).json({ message: 'Doctor profile created successfully', doctor });
+      }
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
 
 const Specialization_Info = async(req, res,step, userId) => {
   try {
@@ -173,7 +226,6 @@ const Specialization_Info = async(req, res,step, userId) => {
       } else if (err) {
         return res.status(500).json({ message: 'Internal server error', error: err });
       }
-
       let doctor = await Doctor.findOne({ where: { userId } });
       if (doctor) {
         doctor = await doctor.update({
@@ -228,7 +280,6 @@ const Specialization_Info = async(req, res,step, userId) => {
 
 const Identification_Info = async (req, res,step, userId) => {
   try {
-
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -238,7 +289,6 @@ const Identification_Info = async (req, res,step, userId) => {
 
       console.log(req.body);
       const { passport_or_national_id_no, language_spoken, proficiency_level  } = req.body;
-
 
       if (err instanceof multer.MulterError) {
         return res.status(400).json({ message: 'Image upload error', error: err });
