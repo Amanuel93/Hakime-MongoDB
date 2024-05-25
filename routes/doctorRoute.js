@@ -27,7 +27,8 @@ router.post('/completeProfile/:step',checkAuth, Complete_DoctorProfile);
 router.get('/getDoctor',checkAuth, getDoctorProfile);
 
 router.post('/setSchedule',composeMiddleware([checkAuth, checkProfile]), setDoctorSchedule);
-router.delete('/deleteSchedule/scheduleId',composeMiddleware([checkAuth, checkProfile]),deleteDoctorSchedule);
+router.get('/getAllSchedule',composeMiddleware([checkAuth, checkProfile]), getAllSchedulesforDoctor);
+router.delete('/deleteSchedule/:scheduleId',composeMiddleware([checkAuth, checkProfile]),deleteDoctorSchedule);
 // router.patch('/updateSchedule',checkAuth, updateSchedules);
 
 module.exports = router;

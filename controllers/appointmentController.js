@@ -19,14 +19,13 @@ module.exports.setAppointment = async (req, res) => {
     // const doctorRow = await Doctor.findOne({ where: { userId:Id } })
     // const doctorId = doctorRow.id;
   try {
-    const { doctor_id, schedule_id,appointment_day, appointment_date, appointment_time } = req.body;
+    const { doctor_id,appointment_day, appointment_date, appointment_time,reason,gender,duration,age,hourly_rate } = req.body;
     // Check if appointment slot is available
     // Your logic here...
     // Create new appoiqqqqntment
     const appointment = await Appointment.create({
       patientId:patientId,
       doctorId:doctor_id,
-      scheduleId:schedule_id,
       appointment_day,
       appointment_date,
       appointment_time,

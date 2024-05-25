@@ -32,7 +32,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      case: {
+      age: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      reason: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -40,16 +44,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      hour: {
+      time: {
         type: Sequelize.STRING,
-        allowNull: true
-      },
-      minute: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      period: {
-        type: Sequelize.ENUM('AM','PM'),
         allowNull: true
       },
       status: {

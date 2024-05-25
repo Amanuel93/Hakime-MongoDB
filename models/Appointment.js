@@ -27,7 +27,7 @@ const Appointment = sequelize.define('Appointment', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  case: {
+  reason: {
       type: DataTypes.STRING,
       allowNull: false,
       },
@@ -35,18 +35,10 @@ const Appointment = sequelize.define('Appointment', {
         type:DataTypes.STRING,
         allowNull: true
       },
-  hour: {
+  time: {
         type: DataTypes.STRING,
         allowNull: true
       },
-  minute: {
-        type:DataTypes.STRING,
-        allowNull: true
-      },
-  period: {
-        type:DataTypes.ENUM('AM','PM'),
-        allowNull: true
-      },    
   status:{
       type:DataTypes.STRING,
       defaultValue:'pending',

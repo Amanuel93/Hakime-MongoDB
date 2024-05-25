@@ -39,7 +39,7 @@ module.exports.getDoctorProfile = async (req, res) => {
         {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
-      },
+        },
       {
         model: Schedule,
         attributes: ['id'], // Select only name and email from the User model

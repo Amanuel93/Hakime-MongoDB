@@ -54,6 +54,41 @@ module.exports.setDoctorSchedule = async (req, res) => {
   }
 }
 
+module.exports.getAllSchedulesforDoctor = async (req, res) => {
+  const { doctorId } = req.userData;
+
+  try {
+    const schedules = await Schedule.findAll({
+      where: {
+        doctorId: doctorId
+      }
+    });
+
+    res.status(200).json(schedules);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports.getAllSchedulesforPatient= async (req, res) => {
+  const { doctorId } = req.params;
+
+  try {
+    const schedules = await Schedule.findAll({
+      where: {
+        doctorId: doctorId
+      }
+    });
+
+    res.status(200).json(schedules);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 module.exports.deleteDoctorSchedule = async (req, res) => {
   const { doctorId } = req.userData;
   const { scheduleId } = req.params;

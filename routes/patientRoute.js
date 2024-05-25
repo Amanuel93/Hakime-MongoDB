@@ -8,8 +8,9 @@ const  {checkAuth}  = require('../middleware/authMiddleware')
 router.post('/patient',checkAuth, completePatientProfile);
 router.get('/getpatient',checkAuth,getPatientProfile);
 router.get('/getDoctor/:id',checkAuth, getDoctorProfile);
-router.get('/searchName',checkAuth,searchBy_name);
-router.get('/searchSpecialty',checkAuth,searchBy_speciality);
+// router.get('/searchName',checkAuth,searchBy_name);
+// router.get('/searchSpecialty',checkAuth,searchBy_speciality);
+router.get('/getAllSchedule/:doctorId',checkAuth,getAllSchedulesforPatient);
 
 router.post('/setAppointment',checkAuth, setAppointment);
 

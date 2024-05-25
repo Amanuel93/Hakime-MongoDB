@@ -24,7 +24,7 @@ module.exports.getDoctorProfile = async (req, res) => {
       }, 
       {
         model: Schedule,
-        attributes: ['day', 'initial_time','final_time'], // Select only name and email from the User model
+        attributes: ['day', 'hour','minute','period'], // Select only name and email from the User model
        },
        {
         model: Appointment,

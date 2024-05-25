@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
+const Review = require('../models/Review');
 
 module.exports.completePatientProfile = async (req, res) => {
     try {
@@ -89,6 +90,28 @@ module.exports.completePatientProfile = async (req, res) => {
           res.status(500).json({ error: 'Internal server error' });
         }
       }
+
+      module.exports.getAllDoctor = async (req, res) => {
+        try {
+          // Retrieve all doctors with their associated user information and picture
+          const doctors = await Doctor.findAll({
+            include: [
+              {
+              model: User,
+              attributes: ['name', 'email'], // Select only name and email from the User model
+            },
+          ],
+          attributes: ['id', 'specialization', 'nationality','address','hourly_rate','image'],
+            where: {
+              // Add conditions if needed
+            }
+          });
+          res.status(200).json(doctors);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: 'Internal server error' });
+        } 
+      };
 
     
 
