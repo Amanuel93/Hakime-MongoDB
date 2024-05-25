@@ -27,7 +27,7 @@ async function validateDoctorAttributes(doctor) {
         const isValid = await validateDoctorAttributes(doctor);
         if (!isValid) {
             return res.status(401).json({
-                message: "Dear doctor, please complete your profile to schedule"
+                message: "Dear doctor, please complete your profile to schedule",
             });
         }
 

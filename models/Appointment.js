@@ -23,29 +23,45 @@ const Appointment = sequelize.define('Appointment', {
           key: 'id' // This is the field in the referenced model
         }
       },
-  //  scheduleId: {
-  //       type: DataTypes.INTEGER,
-  //       allowNull: true,
-  //       references: {
-  //         model: Schedule, // This is the model that the foreign key references
-  //         key: 'id' // This is the field in the referenced model
-  //       }
-  //     },
-    day: {
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  case: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      },
+   day: {
+        type:DataTypes.STRING,
+        allowNull: true
+      },
+  hour: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
-    date:{
-        type:DataTypes.DATE,
-        allowNull:false
+  minute: {
+        type:DataTypes.STRING,
+        allowNull: true
       },
-      initial_time: {
-        type: DataTypes.TIME,
-        allowNull: false
+  period: {
+        type:DataTypes.ENUM('AM','PM'),
+        allowNull: true
+      },    
+  status:{
+      type:DataTypes.STRING,
+      defaultValue:'pending',
       },
-      final_time: {
-        type: DataTypes.TIME,
-        allowNull: false
+  duration: {
+      type: DataTypes.STRING,
+      allowNull: false
+      },
+  hourly_rate: {
+      type: DataTypes.TIME,
+       allowNull: false
+      },
+  response: {
+        type: DataTypes.STRING,
+        allowNull: true
       },
 });
 

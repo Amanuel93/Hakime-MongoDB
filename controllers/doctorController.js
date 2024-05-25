@@ -128,7 +128,6 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
   }
 }
 
-
 const Professional_Info = async (req, res, step, userId) => {
   try {
     const user = await User.findByPk(userId);

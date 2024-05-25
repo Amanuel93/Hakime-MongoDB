@@ -22,8 +22,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      time: {
-        type:Sequelize.TIME,
+      hour: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      minute: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      period: {
+        type: Sequelize.ENUM('AM','PM'),
         allowNull: true
       },
       createdAt: {
@@ -40,4 +48,5 @@ module.exports = {
     await queryInterface.dropTable('Schedules');
   }
 };
+
 

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Patients',
+          model: 'Users', // Correctly reference the Users table
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -22,27 +22,51 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Doctors',
+          model: 'Users', // Correctly reference the Users table
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      day: {
+      gender: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      date: {
-        type: Sequelize.DATE,
+      case: {
+        type: Sequelize.STRING,
         allowNull: false
       },
-      initial_time: {
+      day: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      hour: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      minute: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      period: {
+        type: Sequelize.ENUM('AM','PM'),
+        allowNull: true
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue:'pending',
+      },
+      duration: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      hourly_rate: {
         type: Sequelize.TIME,
         allowNull: false
       },
-      final_time: {
-        type: Sequelize.TIME,
-        allowNull: false
+      response: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -58,5 +82,4 @@ module.exports = {
     await queryInterface.dropTable('Appointments');
   }
 };
-
 

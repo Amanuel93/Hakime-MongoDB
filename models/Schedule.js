@@ -15,10 +15,18 @@ const Schedule = sequelize.define('Schedule', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  time: {
-    type: DataTypes.TIME,
+  hour: {
+    type: DataTypes.STRING,
     allowNull: true
-  }
+  },
+  minute: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  period: {
+    type: DataTypes.ENUM('AM','PM'),
+    allowNull: true
+  },
 });
 
 Schedule.belongsTo(Doctor)
