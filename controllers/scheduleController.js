@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 const Schedule = require('../models/Schedule');
 
 // Function to convert time in meridian format to 24-hour format
@@ -53,3 +53,27 @@ module.exports.setDoctorSchedule = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+module.exports.deleteDoctorSchedule = async (req, res) => {
+  const { doctorId } = req.userData;
+  const { scheduleId } = req.params;
+
+  try {
+    const schedule = await Schedule.findOne({
+      where: {
+        id: scheduleId,
+        doctorId: doctorId
+      }
+    });
+
+    if (!schedule) {
+      return res.status(404).json({ error: 'Schedule not found or you do not have permission to delete this schedule' });
+    }
+
+    await schedule.destroy();
+    res.status(200).json({ message: 'Schedule deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
