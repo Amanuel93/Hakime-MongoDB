@@ -27,7 +27,7 @@ module.exports.createReview = async (req, res) => {
     }
     console.log(doctorId,doctorReviewId);
 
-    console.log('user.role === doctor:', user.role === 'doctor');
+    console.log('user.role === doctor', user.role === 'doctor');
     console.log('doctorReviewId === doctorId:', doctorReviewId === doctorId);
 
     // Create the review
