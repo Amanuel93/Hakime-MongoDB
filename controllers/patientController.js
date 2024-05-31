@@ -113,6 +113,50 @@ module.exports.completePatientProfile = async (req, res) => {
         } 
       };
 
+      module.exports.getDoctorProfile = async (req, res) => {
+        try {
+          const {Id}   = req.params;
+         // Assuming you have user information stored in req.user after authentication
+          // Check if the user exists
+          const user = await User.findByPk(Id);
+          if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          }
+          // Check if the user is already a doctor
+          let doctor = await Doctor.findOne({ 
+            where: { userId: Id },
+            include:
+            [
+              {
+              model: User,
+              attributes: ['name', 'email'], // Select only name and email from the User model
+            }, 
+            {
+              model: Schedule,
+              attributes: ['day', 'hour','minute','period'], // Select only name and email from the User model
+             },
+             {
+              model: Appointment,
+              attributes: [], // Select only name and email from the User model
+             },
+             {
+              model: Review,
+              attributes: ['review_text','rating'], // Select only name and email from the User model
+             },
+          ],
+          Attribute:['id','image','date_of_birth','address','specialization'],
+          });
+          if (!doctor) {
+            return res.status(404).json({ message: 'Doctor profile not found' });
+          }
+          res.status(200).json(doctor);
+        } catch (error) {
+          console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+      }
+      
+
     
 
 

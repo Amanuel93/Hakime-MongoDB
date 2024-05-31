@@ -1,24 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const  {checkAuth}  = require('../middleware/authMiddleware')
-const {createPost,updatePost,deletePost} = require('../controllers/postController');
 const {createReview,updateReview,deleteReview} = require('../controllers/reviewController');
-const {getPatientProfile,getDoctorProfile,getAllDoctor,getApprovedDoctors} = require('../controllers/adminController.js');
-
-// Create a new post
-router.post('/posts', checkAuth, createPost);
-
-// Update a post by ID
-router.put('/posts/:id', checkAuth, updatePost);
-
-// Delete a post by ID
-router.delete('/posts/:id', checkAuth, deletePost);
+const {getDoctorProfile,getApprovedDoctors} = require('../controllers/userController.js');
+const Doctor = require('../models/Doctor.js');
 
 router.post('/reviews/:doctorReviewId', checkAuth, createReview);
 router.put('/reviews/:reviewId', checkAuth, updateReview);
 router.delete('/reviews/:reviewId', checkAuth, deleteReview);
 
-router.get('/getDoctor/:id',checkAuth, getDoctorProfile);
+router.get('/getDoctor/:id', getDoctorProfile);
 router.get('/getAllDoctor',getApprovedDoctors);
 
 module.exports = router;
+
+sequelize migration:generate --name Doctor
+sequelize migration:generate --name Patient
+sequelize migration:generate --name Schedule
+sequelize migration:generate --name Appointment
+sequelize migration:generate --name Chat
+sequelize migration:generate --name Notification
+sequelize migration:generate --name Post
+sequelize migration:generate --name Review
+sequelize migration:generate --name First_Aid
+

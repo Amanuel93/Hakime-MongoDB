@@ -3,8 +3,6 @@ const sequelize = require('../config/db'); // Assuming your Sequelize instance i
 const User = require('../models/User');
 const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
-const Schedule = require('../models/Schedule');
-
 
 const Appointment = sequelize.define('Appointment', {
   patientId: {

@@ -27,7 +27,7 @@ module.exports = {
         allowNull: true
       },
       image: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: true // Depending on your requirement, it can be allowNull: true if image is mandatory
       },
       Bio: {
@@ -70,7 +70,7 @@ module.exports = {
         allowNull: true
       },
       cv: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: true
       },
 
@@ -88,7 +88,7 @@ module.exports = {
         allowNull: true
       },
       Id_Image: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: true // Depending on your requirement, it can be allowNull: true if image is mandatory
       },
 
@@ -100,6 +100,10 @@ module.exports = {
       step: {
         type: Sequelize.INTEGER,
         allowNull: true,
+      },
+      rating_score: {
+        type: Sequelize.INTEGER,
+        defaultValue:0,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -154,5 +158,3 @@ module.exports = {
     await queryInterface.dropTable('Doctors');
   }
 };
-
-

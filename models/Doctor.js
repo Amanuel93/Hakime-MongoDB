@@ -96,6 +96,10 @@ const Doctor = sequelize.define('Doctor', {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  rating_score: {
+    type: DataTypes.INTEGER,
+    defaultValue:0,
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,

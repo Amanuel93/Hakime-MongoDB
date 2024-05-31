@@ -35,6 +35,7 @@ module.exports.getDoctorProfile = async (req, res) => {
         attributes: ['review_text','rating'], // Select only name and email from the User model
        },
     ],
+    Attribute:['id','image','date_of_birth','address','specialization'],
     });
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor profile not found' });
@@ -303,6 +304,33 @@ const Identification_Info = async (req, res,step, userId) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+module.exports.getAllDoctor = async (req, res) => {
+  try {
+    // Retrieve all doctors with their associated user information and picture
+    const doctors = await Doctor.findAll({
+      include: [
+        {
+        model: User,
+        attributes: ['name', 'email'], // Select only name and email from the User model
+      }, 
+      {
+        model: Schedule,
+        attributes: ['id','day','hour','minute','period'], // Select only name and email from the User model
+       },
+    ],
+      where: {
+        // Add conditions if needed
+      }
+    });
+    res.status(200).json(doctors);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  } 
+};
+
+
 
 
 

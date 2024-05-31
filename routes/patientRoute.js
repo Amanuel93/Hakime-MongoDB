@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {completePatientProfile,getPatientProfile,searchBy_name,searchBy_speciality} = require('../controllers/patientController.js');
+const {completePatientProfile,getPatientProfile,searchBy_name,searchBy_speciality,getDoctorProfile} = require('../controllers/patientController.js');
 const {setAppointment} = require('../controllers/appointmentController.js');
-const {getDoctorProfile} = require('../controllers/adminController.js');
 const  {checkAuth}  = require('../middleware/authMiddleware')
 
 router.post('/patient',checkAuth, completePatientProfile);

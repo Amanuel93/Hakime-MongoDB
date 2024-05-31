@@ -10,11 +10,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      sub_title: {
+        type:  Sequelize.STRING,
+        allowNull: false
+      },
       content: {
         type: Sequelize.STRING
       },
       image: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: true
       },
       userId: {
@@ -38,4 +46,5 @@ module.exports = {
     await queryInterface.dropTable('Posts');
   }
 };
+
 

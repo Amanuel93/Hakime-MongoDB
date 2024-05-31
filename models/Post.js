@@ -6,6 +6,14 @@ const User = require('../models/User');
 
 
 const Post = sequelize.define('Post', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  sub_title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   content: {
     type: DataTypes.STRING,
     allowNull: false

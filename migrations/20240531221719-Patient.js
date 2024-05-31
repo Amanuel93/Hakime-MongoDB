@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       image: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
         allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
       },
       relevant_allergy: {
@@ -44,5 +44,4 @@ module.exports = {
     await queryInterface.dropTable('Patients');
   }
 };
-
 

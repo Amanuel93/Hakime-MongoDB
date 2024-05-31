@@ -1,8 +1,9 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 const Doctor  = require('../models/Doctor');
+const Patient  = require('../models/Patient');
 const Schedule = require('../models/User');
-const Appointment = require('../models/Post');
+const Review = require('../models/Review');
 const bcrypt = require('bcryptjs');
 
 module.exports.getAllUsers = async (req, res) => {
@@ -55,8 +56,79 @@ module.exports.getAllUsers = async (req, res) => {
     } catch (error) {
       console.error('Error creating admin user:', error);
     }
-  }
+  };
 
+  module.exports.getDoctorProfile = async (req, res) => {
+    try {
+      const { id } = req.params;
+      // Retrieve a single doctor with their associated user information and picture
+      const doctor = await Doctor.findByPk(id, {
+        include: [
+          {
+          model: User,
+          attributes: ['name', 'email'], // Select only name and email from the User model
+          },
+        {
+          model: Schedule,
+          attributes: ['id','day','hour','minute','period'], // Select only name and email from the User model
+         },
+         {
+          model: Review,
+          attributes: ['review_text','rating','userId'], // Select only name and email from the User model
+         },
+      ],
+      });
+  
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' });
+      }
+  
+      res.status(200).json(doctor);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+  module.exports.getApprovedDoctors = async (req, res) => {
+    try {
+      const approvedDoctors = await Doctor.findAll({
+        include:[
+         {
+          model:User,
+          attributes:['name'],
+         },
+         {
+          model: Review,
+          include: [
+            {
+              model: User, // Assuming Review is associated with User who gave the review
+              attributes: ['name'], // Select only name from the User model
+            },
+            {
+              model: Patient, // Assuming Review is associated with Patient who gave the review
+              attributes: ['image'], // Select only image from the Patient model
+            }, 
+            {
+              model: Doctor, // Assuming Review is associated with Patient who gave the review
+              attributes: ['image'], // Select only image from the Patient model
+            }, 
+          ],
+          attributes: ['userId','rating', 'review_text'] // Select only the rating and comment from the Review model
+        }
+        ],
+        Attribute:['id','image','specialization'],
+        where: {
+          status: 'approved'
+        }
+      });
+      res.status(200).json(approvedDoctors);
+    } catch (error) {
+      console.error('Error fetching approved doctors:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
   
   
 

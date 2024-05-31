@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {getPatientProfile,getDoctorProfile,getAllDoctor,getAllPatient,approveDoctor,disapproveDoctor,getApprovedDoctors,getnot_ApprovedDoctors,countDoctors,countPatients } = require('../controllers/adminController.js');
+const {createPost,updatePost,deletePost} = require('../controllers/postController');
 const {updateProfile} = require('../controllers/authController.js');
 const  {checkAuth}  = require('../middleware/authMiddleware')
 const { createFirstAid,getAllFirstAids, getFirstAidById, updateFirstAid,deleteFirstAid} =  require('../controllers/first_AidController.js');
@@ -23,5 +24,9 @@ router.patch('/first_aids/:id',  updateFirstAid);
 router.patch('/approveDoctor/:id',checkAuth, approveDoctor);
 router.patch('/dis-approveDoctor/:id',checkAuth, disapproveDoctor);
 router.patch('/updateProfile',checkAuth, updateProfile);
+
+router.post('/posts', checkAuth, createPost);
+router.put('/posts/:id', checkAuth, updatePost);
+router.delete('/posts/:id', checkAuth, deletePost);
 
 module.exports = router;
