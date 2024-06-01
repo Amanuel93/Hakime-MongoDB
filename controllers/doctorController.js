@@ -28,11 +28,11 @@ module.exports.getDoctorProfile = async (req, res) => {
        },
        {
         model: Appointment,
-        attributes: [], // Select only name and email from the User model
+        attributes: ['id','doctorId','gender'], // Select only name and email from the User model
        },
        {
         model: Review,
-        attributes: ['review_text','rating'], // Select only name and email from the User model
+        attributes: ['id','doctorId','patientId','userId','name','image','review_text','rating'], // Select only name and email from the User model
        },
     ],
     Attribute:['id','image','date_of_birth','address','specialization'],

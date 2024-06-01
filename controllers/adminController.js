@@ -11,10 +11,16 @@ module.exports.getPatientProfile = async (req, res) => {
     const { id } = req.params;
     // Retrieve a single patient with their associated user information and picture
     const patient = await Patient.findByPk(id, {
-      include: {
-        model: User,
-        attributes: ['name', 'email'], // Select only name and email from the User model
-      },
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'], // Select only name and email from the User model
+        },
+        {
+          model: Appointment,
+          attributes: ['id','patientId','doctorId','reason','day','time','status','duration','hourly_rate'], // Select only name and email from the User model
+         },
+      ],
       attributes: ['id', 'image'], // Select patient ID and picture from the Patient model
     });
 
@@ -42,11 +48,15 @@ module.exports.getDoctorProfile = async (req, res) => {
         },
       {
         model: Schedule,
-        attributes: ['id'], // Select only name and email from the User model
+        attributes: ['id','day','hour','minute','period'], // Select only name and email from the User model
        },
        {
         model: Review,
-        attributes: ['review_text','rating'], // Select only name and email from the User model
+        attributes: ['id','doctorId','patientId','userId','name','image','review_text','rating'], // Select only name and email from the User model
+       },
+       {
+        model: Appointment,
+        attributes: ['id','patientId','doctorId','reason','day','time','status','duration','hourly_rate'], // Select only name and email from the User model
        },
     ],
     });
@@ -70,10 +80,6 @@ module.exports.getAllPatient = async (req, res) => {
         {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
-       },
-       {
-        model: Appointment,
-        attributes: [], // Select only name and email from the User model
        },
     ],
       attributes: ['id', 'image'], // Select patient ID and picture from the Patient model
@@ -99,15 +105,8 @@ module.exports.getAllDoctor = async (req, res) => {
         model: User,
         attributes: ['name', 'email'], // Select only name and email from the User model
       }, 
-      {
-        model: Schedule,
-        attributes: ['monday', 'tuesday','wednesday', 'thursday','friday', 'saturday','sunday'], // Select only name and email from the User model
-       },
-       {
-        model: Appointment,
-        attributes: [], // Select only name and email from the User model
-       },
     ],
+      attributes: ['id', 'image'],
       where: {
         // Add conditions if needed
       }

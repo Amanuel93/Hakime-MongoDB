@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: Doctor, // This is the model that the foreign key references
+          model: 'Doctors', // This is the model that the foreign key references
           key: 'id' // This is the field in the referenced model
         }
       },
@@ -21,7 +21,7 @@ module.exports = {
         type:  Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: Patient, // This is the model that the foreign key references
+          model: 'Patients', // This is the model that the foreign key references
           key: 'id' // This is the field in the referenced model
         }
       },
@@ -29,7 +29,7 @@ module.exports = {
         type:  Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: User, // This is the model that the foreign key references
+          model: 'Users', // This is the model that the foreign key references
           key: 'id' // This is the field in the referenced model
         }
       },
@@ -40,6 +40,14 @@ module.exports = {
     rating: {
       type:  Sequelize.INTEGER,
       allowNull: false
+    },
+    name: {
+      type:  Sequelize.STRING,
+      allowNull: false
+    },
+    image: {
+      type:  Sequelize.STRING,
+      allowNull: true
     },
     createdAt: {
         allowNull: false,

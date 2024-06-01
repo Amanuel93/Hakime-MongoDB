@@ -1,14 +1,5 @@
 const Appointment = require('../models/Appointment');
-
-const Schedule = require('../models/Schedule');
-const Doctor = require('../models/Doctor');
 const Patient = require('../models/Patient');
-    // const  decoded = req.userData;
-    // const Id = decoded.id
-    // const patientRow = await Patient.findOne({ where: { userId:Id } })
-    // const doctorRow = await Patient.findOne({ where: { userId:Id } })
-    // const patientId = patientRow.id;
-    // const doctorId = doctorRow.id;
 
 module.exports.setAppointment = async (req, res) => {
 
@@ -37,19 +28,7 @@ module.exports.setAppointment = async (req, res) => {
   }
 };
 
-// module.exports.getDoctorAppointments = async (req, res) => {
-//   try {
-//     // Find appointments for the patient or doctor
-//     const appointments = await Appointment.findAll({
-//         where: { doctorId: doctorId },
-//         include: [Doctor],
-//       });
-//     res.status(200).json({ message: 'Appointments fetched successfully', appointments });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
+
 
 
 

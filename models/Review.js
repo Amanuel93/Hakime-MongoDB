@@ -40,7 +40,15 @@ const Review = sequelize.define('Review', {
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    name: {
+      type:  DataTypes.STRING,
+      allowNull: false
+    },
+    image: {
+      type:  DataTypes.STRING,
+      allowNull: true
+    },
   });
 
  // Define associations

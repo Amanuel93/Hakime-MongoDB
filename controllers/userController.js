@@ -98,24 +98,6 @@ module.exports.getAllUsers = async (req, res) => {
           model:User,
           attributes:['name'],
          },
-         {
-          model: Review,
-          include: [
-            {
-              model: User, // Assuming Review is associated with User who gave the review
-              attributes: ['name'], // Select only name from the User model
-            },
-            {
-              model: Patient, // Assuming Review is associated with Patient who gave the review
-              attributes: ['image'], // Select only image from the Patient model
-            }, 
-            {
-              model: Doctor, // Assuming Review is associated with Patient who gave the review
-              attributes: ['image'], // Select only image from the Patient model
-            }, 
-          ],
-          attributes: ['userId','rating', 'review_text'] // Select only the rating and comment from the Review model
-        }
         ],
         Attribute:['id','image','specialization'],
         where: {
