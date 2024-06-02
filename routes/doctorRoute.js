@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Complete_DoctorProfile,getDoctorProfile,} = require('../controllers/doctorController.js');
+const {Complete_DoctorProfile,getDoctorProfile,getAllDoctor,getSingleDoctorProfile} = require('../controllers/doctorController.js');
 const {setDoctorSchedule,deleteDoctorSchedule,getAllSchedulesforDoctor} = require('../controllers/scheduleController.js');
 const { checkAuth } = require('../middleware/authMiddleware');
 const { checkProfile } = require('../middleware/scheduleMiddleware');
@@ -25,6 +25,9 @@ const composeMiddleware = (middlewares) => {
 
 router.post('/completeProfile/:step',checkAuth, Complete_DoctorProfile);
 router.get('/getDoctor',checkAuth, getDoctorProfile);
+router.get('/getAllDoctor',checkAuth, getAllDoctor);
+router.get('/getDoctor/:id',checkAuth,getSingleDoctorProfile);
+
 
 router.post('/setSchedule',composeMiddleware([checkAuth, checkProfile]), setDoctorSchedule);
 router.get('/getAllSchedule',composeMiddleware([checkAuth, checkProfile]), getAllSchedulesforDoctor);
