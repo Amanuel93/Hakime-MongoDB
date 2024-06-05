@@ -121,35 +121,6 @@ module.exports.getAllUsers = async (req, res) => {
     }
   };
 
- 
-  module.exports.chatGptPrompt = async (req, res) => {
-    const OpenAPIClient = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-
-    try {
-      const { question } = req.body;
-  
-      const completion = await OpenAPIClient.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { 
-            role: 'user', 
-            content: question 
-          },
-          // { 
-          //   role: 'user', 
-          //   content: question 
-          // },
-        ],
-      })
-
-      res.status(200).json(completion.data.choices[0].message.content);
-    } catch (error) {
-      console.error('Error creating chat completion:', error);
-      res.status(500).json({ error: 'An error occurred while processing your request.' });
-    }
-  };
   
   
   
