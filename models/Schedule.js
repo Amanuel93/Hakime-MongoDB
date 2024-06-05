@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
 const Doctor = require('../models/Doctor');
+const User = require('../models/User');
 
 const Schedule = sequelize.define('Schedule', {
   doctorId: {
@@ -8,6 +9,14 @@ const Schedule = sequelize.define('Schedule', {
         allowNull: true,
         references: {
           model: Doctor, // This is the model that the foreign key references
+          key: 'id' // This is the field in the referenced model
+        }
+      },
+  userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: User, // This is the model that the foreign key references
           key: 'id' // This is the field in the referenced model
         }
       },
@@ -31,5 +40,8 @@ const Schedule = sequelize.define('Schedule', {
 
 Schedule.belongsTo(Doctor)
 Doctor.hasMany(Schedule, {foreignKey:'doctorId'})
+
+Schedule.belongsTo(User)
+User.hasMany(Schedule, {foreignKey:'userId'})
 
 module.exports = Schedule;

@@ -76,9 +76,9 @@ module.exports.login = async (req, res) => {
     const doctor = await Doctor.findOne({where: {userId: Id}})
     
     if(doctor && user.role === 'doctor'){
-      res.status(200).json({ message:'Doctor Logged in successfully',name: user.name ,role: user.role,status: doctor.status, token });
+      res.status(200).json({ message:'Doctor Logged in successfully',name: user.name ,id:user.id,step:user.step,role: user.role,status: doctor.status, token });
     }else{
-      res.status(200).json({ message:'User Logged in successfully',name: user.name ,role: user.role, token });
+      res.status(200).json({ message:'User Logged in successfully',name: user.name ,role: user.role,id:user.id, token });
     }
   } catch (error) {
     console.error('Error during user login:', error);

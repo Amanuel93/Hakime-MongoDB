@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Transaction } = require('sequelize');
 const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
 const User = require('../models/User');
 
@@ -29,3 +29,5 @@ const Patient = sequelize.define('Patient', {
   Patient.belongsTo(User,{ foreignKey: 'userId'});
   
   module.exports = Patient;
+
+  

@@ -110,7 +110,7 @@ const Doctor = sequelize.define('Doctor', {
   }
 });
 
-User.hasOne(Doctor, { foreignKey: 'userId'});
+// User.hasMany(Doctor);
 Doctor.belongsTo(User,{ foreignKey: 'userId'});
 
 module.exports = Doctor;

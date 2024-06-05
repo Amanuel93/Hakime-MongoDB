@@ -53,10 +53,11 @@ const Appointment = require('../models/Appointment');
       const  decoded = req.userData;
       const Id = decoded.id // Assuming you have user information stored in req.user after authentication
       // Check if the user exists
-      const user = await User.findByPk(Id);
+      const user = await User.findByPk(Id)
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
+     
       // Check if the user is already a patient
       let patient = await Patient.findOne({ where: { userId: Id } });
       if (!patient) {
@@ -114,7 +115,7 @@ const Appointment = require('../models/Appointment');
             include: [
               {
               model: User,
-              attributes: ['name', 'email'], // Select only name and email from the User model
+              attributes: ['id','name', 'email'], // Select only name and email from the User model
             },
             {
               model: Review,
@@ -156,15 +157,11 @@ const Appointment = require('../models/Appointment');
               attributes: ['day', 'hour','minute','period'], // Select only name and email from the User model
              },
              {
-              model: Appointment,
-              attributes: [], // Select only name and email from the User model
-             },
-             {
               model: Review,
               attributes: ['id','doctorId','patientId','userId','name','image','review_text','rating'], // Select only name and email from the User model
              },
           ],
-          Attribute:['id','image','date_of_birth','address','specialization'],
+          attributes:['id','image','date_of_birth','address','specialization'],
           });
           if (!doctor) {
             return res.status(404).json({ message: 'Doctor profile not found' });

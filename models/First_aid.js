@@ -1,26 +1,22 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class First_Aid extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  First_Aid.init({
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
-    source: DataTypes.STRING,
-    image: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'First_Aid',
-  });
-  return First_Aid;
-};
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
+
+const First_Aid = sequelize.define('First_Aid', {
+  title: {
+    type: DataTypes.STRING
+  },
+  content: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  source: {
+    type: DataTypes.STRING,
+    allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+});
+
+module.exports = First_Aid;

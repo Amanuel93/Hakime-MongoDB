@@ -1,5 +1,5 @@
 // controllers/firstAidController.js
-const { First_Aids } = require('../models');
+const { First_Aid } = require('../models');
 const { uploadImage } = require('../middleware/multerMiddleware');
 
 // Create a new first aid entry
@@ -13,7 +13,7 @@ const createFirstAid = async (req, res) => {
       const { title, content, source } = req.body;
       const image = req.file ? req.file.path : null;
 
-      const firstAid = await First_Aids.create({
+      const firstAid = await First_Aid.create({
         title,
         content,
         source,
@@ -32,7 +32,7 @@ const createFirstAid = async (req, res) => {
 // Get all first aid entries
 const getAllFirstAids = async (req, res) => {
   try {
-    const firstAids = await First_Aids.findAll();
+    const firstAids = await First_Aid.findAll();
     res.status(200).json(firstAids);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,7 +42,7 @@ const getAllFirstAids = async (req, res) => {
 // Get a single first aid entry by ID
 const getFirstAidById = async (req, res) => {
   try {
-    const firstAid = await First_Aids.findByPk(req.params.id);
+    const firstAid = await First_Aid.findByPk(req.params.id);
     if (!firstAid) {
       return res.status(404).json({ error: 'First aid entry not found' });
     }
@@ -105,3 +105,4 @@ module.exports = {
   updateFirstAid,
   deleteFirstAid
 };
+

@@ -2,19 +2,22 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Doctor  = require('../models/Doctor');
 const Patient  = require('../models/Patient');
-const Schedule = require('../models/User');
+const Schedule = require('../models/Schedule');
 const Review = require('../models/Review');
 const bcrypt = require('bcryptjs');
+// const openai = require("openai");
+require('dotenv').config();
+const { OpenAI } = require('openai');
 
 module.exports.getAllUsers = async (req, res) => {
-    try {
-      const users = await User.findAll({include:[Post]});
-      res.json(users);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
+  try {
+    const users = await User.findAll({include:[Post]});
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
   
   // Controller function to get a single user by ID
   module.exports.getUserById = async (req, res) => {
@@ -42,7 +45,7 @@ module.exports.getAllUsers = async (req, res) => {
       
       const password = "admin";
       const hashedPassword = await bcrypt.hash(password, 10);
-  
+      
       // Create a new admin user
       const adminData = {
         name: 'Admin',
@@ -57,49 +60,56 @@ module.exports.getAllUsers = async (req, res) => {
       console.error('Error creating admin user:', error);
     }
   };
-
+  
   module.exports.getDoctorProfile = async (req, res) => {
     try {
-      const { id } = req.params;
-      // Retrieve a single doctor with their associated user information and picture
-      const doctor = await Doctor.findByPk(id, {
-        include: [
+      const {Id}   = req.params;
+      // Assuming you have user information stored in req.user after authentication
+      // Check if the user exists
+      // const user = await User.findByPk(Id);
+      // if (!user) {
+      //   return res.status(404).json({ message: 'User not found' });
+      // }
+      // Check if the user is already a doctor
+      let doctor = await Doctor.findByPk(Id,{ 
+        // where: { userId: Id },
+        include:
+        [
           {
           model: User,
-          attributes: ['name', 'email'], // Select only name and email from the User model
-          },
+          attributes: ['id','name', 'email'], // Select only name and email from the User model
+         }, 
         {
           model: Schedule,
-          attributes: ['id','day','hour','minute','period'], // Select only name and email from the User model
-         },
-         {
+          attributes: ['day', 'hour','minute','period'], // Select only name and email from the User model
+        },
+        {
           model: Review,
-          attributes: ['review_text','rating','userId'], // Select only name and email from the User model
-         },
+          attributes: ['id','doctorId','patientId','userId','name','image','review_text','rating'], // Select only name and email from the User model
+        },
       ],
+      attributes:['id','image','date_of_birth','address','specialization'],
       });
-  
       if (!doctor) {
-        return res.status(404).json({ message: 'Doctor not found' });
+        return res.status(404).json({ message: 'Doctor profile not found' });
       }
-  
       res.status(200).json(doctor);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  };
+    res.status(500).json({ message: 'Internal server error' });
+  }
+  }
 
   module.exports.getApprovedDoctors = async (req, res) => {
     try {
       const approvedDoctors = await Doctor.findAll({
         include:[
-         {
-          model:User,
-          attributes:['name'],
-         },
+          {
+            model:User,
+            attributes:['id','name'],
+          },
         ],
-        Attribute:['id','image','specialization'],
+        attributes:['id','image','specialization'],
         where: {
           status: 'approved'
         }
@@ -108,6 +118,36 @@ module.exports.getAllUsers = async (req, res) => {
     } catch (error) {
       console.error('Error fetching approved doctors:', error);
       res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+ 
+  module.exports.chatGptPrompt = async (req, res) => {
+    const OpenAPIClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+
+    try {
+      const { question } = req.body;
+  
+      const completion = await OpenAPIClient.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { 
+            role: 'user', 
+            content: question 
+          },
+          // { 
+          //   role: 'user', 
+          //   content: question 
+          // },
+        ],
+      })
+
+      res.status(200).json(completion.data.choices[0].message.content);
+    } catch (error) {
+      console.error('Error creating chat completion:', error);
+      res.status(500).json({ error: 'An error occurred while processing your request.' });
     }
   };
   
