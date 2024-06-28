@@ -1,22 +1,25 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
+// models/First_Aid.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const First_Aid = sequelize.define('First_Aid', {
+const FirstAidSchema = new Schema({
   title: {
-    type: DataTypes.STRING
+    type: String,
+    required: true
   },
   content: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   source: {
-    type: DataTypes.STRING,
-    allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+    type: String,
+    required: false
   },
   image: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
+    type: String,
+    required: true
+  }
 });
 
+const First_Aid = mongoose.model('First_Aid', FirstAidSchema);
 module.exports = First_Aid;

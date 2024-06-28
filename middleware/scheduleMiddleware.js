@@ -45,10 +45,8 @@ async function validateDoctorAttributes(doctor) {
             ...req.userData,
             doctorId: doctor.id
         };
-
         // Proceed to the next middleware
         next();
-
     } catch (e) {
         return res.status(401).json({
             message: "Invalid or expired token provided",

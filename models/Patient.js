@@ -1,33 +1,26 @@
-const { DataTypes, Transaction } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const User = require('../models/User');
+// models/Patient.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const Patient = sequelize.define('Patient', {
-    image: {
-      type: DataTypes.BLOB, // This will be mapped to a binary type in the database
-      allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
-    },
-    relevant_allergy: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    medical_history: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: User, // This is the model that the foreign key references
-        key: 'id' // This is the field in the referenced model
-      }
-    }
-  });
+const PatientSchema = new Schema({
+  image: {
+    type: Buffer, // Using Buffer type for binary data
+    required: false
+  },
+  relevant_allergy: {
+    type: String,
+    required: false
+  },
+  medical_history: {
+    type: String,
+    required: false
+  },
+  userId: {
+    type: Schema.Types.ObjectId, // Referencing the User model
+    ref: 'User',
+    required: true
+  }
+});
 
-  User.hasOne(Patient, { foreignKey: 'userId'});
-  Patient.belongsTo(User,{ foreignKey: 'userId'});
-  
-  module.exports = Patient;
-
-  
+const Patient = mongoose.model('Patient', PatientSchema);
+module.exports = Patient;

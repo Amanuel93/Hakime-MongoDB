@@ -22,7 +22,7 @@ router.get('/getFirstAid/:id', getFirstAidById);
 router.patch('/approveDoctor/:id',checkAuth, approveDoctor);
 router.patch('/dis-approveDoctor/:id',checkAuth, disapproveDoctor);
 router.get('/getApprovedDoctor',checkAuth,getApprovedDoctors);
-router.get('/getnot_ApprovedDoctor',checkAuth,getnot_ApprovedDoctors);
+router.get('/get_notApprovedDoctor',checkAuth,getnot_ApprovedDoctors);
 router.patch('/updateProfile',checkAuth, updateProfile);
 
 router.post('/posts', checkAuth, createPost);

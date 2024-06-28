@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 const User = require('../models/User.js');
 const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
-const { where } = require('sequelize');
 
 // Generate JWT token
 const generateToken = (user) => {
@@ -14,11 +14,17 @@ const generateToken = (user) => {
 
 // User registration
 module.exports.register = async (req, res) => {
+  // Validate inputs
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const { name, phone_number, email, password, role } = req.body;
 
     // Check if the user with the provided email already exists
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already exists' });
     }
@@ -46,7 +52,7 @@ module.exports.register = async (req, res) => {
     const token = generateToken(user);
 
     // Return user data and token
-    res.status(201).json({ name, role, token });
+    res.status(201).json({ id: user.id, name, role, token });
   } catch (error) {
     console.error('Error during user registration:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -55,30 +61,51 @@ module.exports.register = async (req, res) => {
 
 // User login
 module.exports.login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const { email, password } = req.body;
+
     // Find user by email
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
+
     // Generate JWT token
     const token = generateToken(user);
+
     // Return user data and token
-    const Id = user.id
-    req.user = Id;
-    // res.status(200).json({ name: user.name ,role: user.role, token });
-    const doctor = await Doctor.findOne({where: {userId: Id}})
+    let userId = user.id;
+    const doctor = await Doctor.findOne({ userId });
     
-    if(doctor && user.role === 'doctor'){
-      res.status(200).json({ message:'Doctor Logged in successfully',name: user.name ,id:user.id,step:user.step,role: user.role,status: doctor.status, token });
-    }else{
-      res.status(200).json({ message:'User Logged in successfully',name: user.name ,role: user.role,id:user.id, token });
+    if (doctor && user.role === 'doctor') {
+      res.status(200).json({
+        message: 'Doctor Logged in successfully',
+        name: user.name,
+        id: user.id,
+        step: user.step,
+        role: user.role,
+        status: doctor.status,
+        token
+      });
+    } else {
+      res.status(200).json({
+        message: 'User Logged in successfully',
+        name: user.name,
+        role: user.role,
+        id: user.id,
+        token
+      });
     }
   } catch (error) {
     console.error('Error during user login:', error);
@@ -88,11 +115,16 @@ module.exports.login = async (req, res) => {
 
 // User update
 module.exports.updateProfile = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const userId = req.user.id; // Get the authenticated user's ID from the request
 
     // Fetch the user from the database
-    const user = await User.findByPk(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }

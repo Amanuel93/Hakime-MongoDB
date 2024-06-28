@@ -32,7 +32,7 @@ const createFirstAid = async (req, res) => {
 // Get all first aid entries
 const getAllFirstAids = async (req, res) => {
   try {
-    const firstAids = await First_Aid.findAll();
+    const firstAids = await First_Aid.find();
     res.status(200).json(firstAids);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,7 +42,7 @@ const getAllFirstAids = async (req, res) => {
 // Get a single first aid entry by ID
 const getFirstAidById = async (req, res) => {
   try {
-    const firstAid = await First_Aid.findByPk(req.params.id);
+    const firstAid = await First_Aid.findById(req.params.id);
     if (!firstAid) {
       return res.status(404).json({ error: 'First aid entry not found' });
     }
@@ -55,7 +55,7 @@ const getFirstAidById = async (req, res) => {
 // Update a first aid entry by ID
 const updateFirstAid = async (req, res) => {
   try {
-    upload.single('image')(req, res, async (err) => {
+    uploadImage(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
@@ -63,12 +63,12 @@ const updateFirstAid = async (req, res) => {
       const { title, content, source } = req.body;
       const image = req.file ? req.file.path : null;
 
-      const firstAid = await First_Aids.findByPk(req.params.id);
+      const firstAid = await First_Aid.findById(req.params.id);
       if (!firstAid) {
         return res.status(404).json({ error: 'First aid entry not found' });
       }
 
-      await firstAid.update({
+      await firstAid.updateOne({
         title,
         content,
         source,
@@ -86,12 +86,12 @@ const updateFirstAid = async (req, res) => {
 // Delete a first aid entry by ID
 const deleteFirstAid = async (req, res) => {
   try {
-    const firstAid = await First_Aids.findByPk(req.params.id);
+    const firstAid = await First_Aid.findById(req.params.id);
     if (!firstAid) {
       return res.status(404).json({ error: 'First aid entry not found' });
     }
 
-    await firstAid.destroy();
+    await firstAid.deleteOne();
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -105,4 +105,3 @@ module.exports = {
   updateFirstAid,
   deleteFirstAid
 };
-

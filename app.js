@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const http = require('http');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
@@ -9,8 +10,8 @@ const postRoutes = require('./routes/postRoutes.js');
 const doctorRoutes = require('./routes/doctorRoute.js');
 const patientRoutes = require('./routes/patientRoute.js');
 const userRoutes = require('./routes/userRoutes.js');
-const scheduleRoutes = require('./routes/scheduleRoutes.js');
-const appointmentRoutes = require('./routes/appointmentRoutes.js');
+// const scheduleRoutes = require('./routes/scheduleRoutes.js');
+// const appointmentRoutes = require('./routes/appointmentRoutes.js');
 const adminRoute = require('./routes/adminRoute.js');
 const {createAdmin} = require('./controllers/userController.js');
 
@@ -51,6 +52,19 @@ io.on('connection', (socket) => {
     console.log('Client disconnected:', socket.id);
     // Perform cleanup or additional actions as needed
   });
+});
+
+// Connect to MongoDB
+const mongoURI = process.env.MONGO_URI;
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB');
 });
 
 const PORT = process.env.PORT || 3000;

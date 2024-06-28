@@ -1,116 +1,104 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const User = require('../models/User');
+// models/Doctor.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const Doctor = sequelize.define('Doctor', {
-
-  // Personal_Information
+const DoctorSchema = new Schema({
   date_of_birth: {
-    type: DataTypes.DATE,
-    allowNull: true
+    type: Date,
+    required: false
   },
   gender: {
-    type: DataTypes.ENUM('Male', 'Female', 'Other'),
-    allowNull: true
+    type: String,
+    enum: ['Male', 'Female', 'Other'],
+    required: false
   },
   nationality: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   address: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   image: {
-    type: DataTypes.BLOB,
-    allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+    type: Buffer,
+    required: false
   },
   Bio: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
-
-  // Professional_Information
   medical_degrees: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   medical_school: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   year_of_graduation: {
-    type: DataTypes.INTEGER,
-    allowNull: true
+    type: Number,
+    required: false
   },
   specialization: {
-    type: DataTypes.STRING 
+    type: String,
+    required: false
   },
-
-  // Specialization_Information
   medical_license_number: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   hourly_rate: {
-    type: DataTypes.TEXT,
-    allowNull: true
+    type: String,
+    required: false
   },
   certificate: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   previous_work_experience: {
-    type: DataTypes.TEXT,
-    allowNull: true
+    type: String,
+    required: false
   },
   cv: {
-    type: DataTypes.BLOB,
-    allowNull: true
+    type: Buffer,
+    required: false
   },
-
-  // Identification_Documents and Language_Proficiency
   passport_or_national_id_no: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   language_spoken: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: String,
+    required: false
   },
   proficiency_level: {
-    type: DataTypes.ENUM('Basic', 'Intermediate', 'Advanced', 'Fluent'),
-    allowNull: true
+    type: String,
+    enum: ['Basic', 'Intermediate', 'Advanced', 'Fluent'],
+    required: false
   },
   Id_Image: {
-    type: DataTypes.BLOB,
-    allowNull: true // Depending on your requirement, it can be allowNull: true if image is mandatory
+    type: Buffer,
+    required: false
   },
-
-  // State of the table
   status: {
-    type: DataTypes.STRING,
-    defaultValue:'not approved',
+    type: String,
+    default: 'not approved'
   },
   step: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
+    type: Number,
+    required: false
   },
   rating_score: {
-    type: DataTypes.INTEGER,
-    defaultValue:0,
+    type: Number,
+    default: 0
   },
   userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: User, // This is the model that the foreign key references
-      key: 'id' // This is the field in the referenced model
-    }
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 });
 
-// User.hasMany(Doctor);
-Doctor.belongsTo(User,{ foreignKey: 'userId'});
-
+const Doctor = mongoose.model('Doctor', DoctorSchema);
 module.exports = Doctor;

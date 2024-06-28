@@ -5,6 +5,9 @@ const {createOrUpdateReview,deleteReview} = require('../controllers/reviewContro
 const {getDoctorProfile,getApprovedDoctors} = require('../controllers/userController.js');
 const {getPost,getAllPost} = require('../controllers/postController');
 const {getAllFirstAids, getFirstAidById} =  require('../controllers/first_AidController.js');
+// const {chatgptResponse} =  require('../controllers/hakimeAIController.js');
+const {getAccountBalance} =  require('../controllers/accountController.js');
+
 router.post('/reviews/:doctorReviewId', checkAuth, createOrUpdateReview);
 router.delete('/reviews/:reviewId', checkAuth, deleteReview);
 
@@ -12,9 +15,13 @@ router.get('/getDoctor/:Id', getDoctorProfile);
 router.get('/getAllDoctor',getApprovedDoctors);
 router.get('/getPost/:id', getPost);
 router.get('/getAllPost', getAllPost);
+// router.get('/getAccount', getAccountBalance);
 
 router.get('/getAllFirstAid', getAllFirstAids);
 router.get('/getFirstAid/:id', getFirstAidById);
+// router.post('/chatGpt',chatgptResponse)
+
+
 
 
 

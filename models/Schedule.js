@@ -1,47 +1,36 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const Doctor = require('../models/Doctor');
-const User = require('../models/User');
+// models/Schedule.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const Schedule = sequelize.define('Schedule', {
+const ScheduleSchema = new Schema({
   doctorId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: Doctor, // This is the model that the foreign key references
-          key: 'id' // This is the field in the referenced model
-        }
-      },
+    type: Schema.Types.ObjectId,
+    ref: 'Doctor',
+    required: true
+  },
   userId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: User, // This is the model that the foreign key references
-          key: 'id' // This is the field in the referenced model
-        }
-      },
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   day: {
-    type: DataTypes.STRING,
+    type: String,
     allowNull: true
   },
   hour: {
-    type: DataTypes.STRING,
+    type: String,
     allowNull: true
   },
   minute: {
-    type: DataTypes.STRING,
+    type: String,
     allowNull: true
   },
   period: {
-    type: DataTypes.ENUM('AM','PM'),
+    type: String,
+    enum: ['AM', 'PM'],
     allowNull: true
-  },
+  }
 });
 
-Schedule.belongsTo(Doctor)
-Doctor.hasMany(Schedule, {foreignKey:'doctorId'})
-
-Schedule.belongsTo(User)
-User.hasMany(Schedule, {foreignKey:'userId'})
-
+const Schedule = mongoose.model('Schedule', ScheduleSchema);
 module.exports = Schedule;

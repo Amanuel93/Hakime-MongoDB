@@ -1,19 +1,19 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const User = require('../models/User');
+// models/Account.js
+// const mongoose = require('mongoose');
+// const { Schema } = mongoose;
 
-const Account = sequelize.define('Account', {
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    balance: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        defaultValue: 0.00
-    }
-  });
+// const AccountSchema = new mongoose.Schema({
+//   userId: {
+//     type: Schema.Types.ObjectId,
+//     ref: 'User',
+//     required: true
+//   },
+//   balance: {
+//     type: mongoose.Decimal128,
+//     required: true,
+//     default: 0.00
+//   }
+// });
 
-  User.hasOne(Account);
-  
-  module.exports = Account;
+// const Account = mongoose.model('Account', AccountSchema);
+// module.exports = Account;

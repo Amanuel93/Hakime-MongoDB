@@ -1,39 +1,32 @@
 // models/post.js
 
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Assuming your Sequelize instance is configured in db.js
-const User = require('../models/User');
+// models/Post.js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-
-const Post = sequelize.define('Post', {
+const PostSchema = new Schema({
   title: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   sub_title: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   content: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   image: {
-    type: DataTypes.BLOB,
-    allowNull: true // Depending on your requirement, it can be allowNull: false if image is mandatory
+    type: Buffer, // Using Buffer type for binary data
+    required: false
   },
   userId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: User, // This is the model that the foreign key references
-      key: 'id' // This is the field in the referenced model
-    }
+    type: Schema.Types.ObjectId, // Referencing the User model
+    ref: 'User',
+    required: true
   }
 });
 
-Post.belongsTo(User);
-User.hasMany(Post, { foreignKey: 'userId' });
-
-
+const Post = mongoose.model('Post', PostSchema);
 module.exports = Post;
