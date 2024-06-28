@@ -28,7 +28,6 @@ router.get('/getDoctor',checkAuth, getDoctorProfile);
 router.get('/getAllDoctor',checkAuth, getAllDoctor);
 router.get('/getDoctor/:id',checkAuth,getSingleDoctorProfile);
 
-
 router.post('/setSchedule',composeMiddleware([checkAuth, checkProfile]), setDoctorSchedule);
 router.get('/getAllSchedule',composeMiddleware([checkAuth, checkProfile]), getAllSchedulesforDoctor);
 router.delete('/deleteSchedule/:scheduleId',composeMiddleware([checkAuth, checkProfile]),deleteDoctorSchedule);
