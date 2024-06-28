@@ -7,7 +7,7 @@ const Review = require('../models/Review');
 const bcrypt = require('bcryptjs');
 // const openai = require("openai");
 require('dotenv').config();
-const { OpenAI } = require('openai');
+
 
 module.exports.getAllUsers = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ module.exports.getAllUsers = async (req, res) => {
 };
   
   // Controller function to get a single user by ID
-  module.exports.getUserById = async (req, res) => {
+module.exports.getUserById = async (req, res) => {
     try {
       const { id } = req.params;
       const user = await User.findById(id).populate('posts');
@@ -32,7 +32,7 @@ module.exports.getAllUsers = async (req, res) => {
       console.error('Error fetching user by ID:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  };
+};
   
 //
 module.exports.createAdmin = async () => {
