@@ -21,10 +21,16 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+const corsOptions = {
+  origin: 'https://hakime-mongodb-3.onrender.com', // Replace with the actual origin you want to allow
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
+};
+
 // Middleware
 // app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
