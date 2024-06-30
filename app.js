@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const http = require('http');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes.js');
