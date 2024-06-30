@@ -48,7 +48,7 @@ module.exports.getAllPatient = async (req, res) => {
   try {
       // Retrieve all patients with their associated user information
       const patients = await Patient.find()
-          .populate('user', 'name email');
+          .populate('userId', 'name email');
 
       res.status(200).json(patients);
   } catch (error) {
@@ -60,7 +60,7 @@ module.exports.getAllDoctor = async (req, res) => {
   try {
       // Retrieve all doctors with their associated user information
       const doctors = await Doctor.find()
-          .populate('user', 'name email');
+          .populate('userId', 'name email');
 
       res.status(200).json(doctors);
   } catch (error) {

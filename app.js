@@ -14,7 +14,7 @@ const userRoutes = require('./routes/userRoutes.js');
 // const scheduleRoutes = require('./routes/scheduleRoutes.js');
 // const appointmentRoutes = require('./routes/appointmentRoutes.js');
 const adminRoute = require('./routes/adminRoute.js');
-const {createAdmin} = require('./controllers/userController.js');
+const { createAdmin } = require('./controllers/userController.js');
 
 dotenv.config();
 
@@ -29,7 +29,6 @@ const corsOptions = {
 };
 
 // Middleware
-// app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,10 +40,10 @@ app.use('/auth', authRoutes);
 app.use('/doctor', doctorRoutes);
 app.use('/patient', patientRoutes);
 app.use('/user', userRoutes);
-app.use('/admin',adminRoute); 
+app.use('/admin', adminRoute);
 // app.use('/post', postRoutes);
 // app.use('/schedule', scheduleRoutes);
-// app.use('/Appointment', appointmentRoutes);
+// app.use('/appointment', appointmentRoutes);
 
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
@@ -67,17 +66,14 @@ const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
+}).then(() => {
   console.log('Connected to MongoDB');
+  createAdmin();
+}).catch(error => {
+  console.error('Error connecting to MongoDB:', error);
 });
 
 const PORT = process.env.PORT || 3000;
-createAdmin();
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
