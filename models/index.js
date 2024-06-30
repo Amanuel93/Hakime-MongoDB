@@ -4,7 +4,7 @@ const Patient = require('./Patient');
 const Doctor = require('./Doctor');
 const Review = require('./Review');
 const User = require('./User');
-const First_Aid = require('./First_Aid');
+const First_Aid = require('./First_aid');
 
 module.exports = {
     Appointment,
