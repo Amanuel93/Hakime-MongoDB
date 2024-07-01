@@ -2,6 +2,7 @@ const {User,Patient,Doctor,Appointment,Schedule,Review} = require('../models');
 const multer = require('multer');
 const path = require('path');
 const { uploadImage,uploadId_Image,uploadCV,uploadCertificate } = require('../middleware/multerMiddleware');
+const mongoose = require('mongoose');
 
 module.exports.getDoctorProfile = async (req, res) => {
   try {
@@ -36,22 +37,24 @@ module.exports.getDoctorProfile = async (req, res) => {
 module.exports.Complete_DoctorProfile = async (req, res) => {
   try {
     const decoded = req.userData;
+    console.log("Decoded token data:",decoded);
     const userId = decoded.id;
+    console.log("User ID from token:", userId);
 
     const step = parseInt(req.params.step);
     // const {step} = req.params
     switch (step) {
       case 1:
-        await Personal_Info(req, res,step, userId);
+        await Personal_Info(req, res,userId);
         break;
         case 2:
-        await Identification_Info(req, res,step, userId);
+        await Identification_Info(req, res,userId);
         break;
       case 3:
-        await Professional_Info(req, res,step, userId);
+        await Professional_Info(req, res,userId);
         break;
       case 4:
-        await Specialization_Info(req, res,step, userId);
+        await Specialization_Info(req, res,userId);
         break;
       default:
         return res.status(400).json({ message: "Invalid step" });
@@ -63,10 +66,15 @@ module.exports.Complete_DoctorProfile = async (req, res) => {
 };
 
 // Personal Info
-const Personal_Info = async (req, res) => {
+const Personal_Info = async (req,res,userId) => {
   try {
-    const { userId } = req.params;
+    console.log("Received userId:", userId);
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
     const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -92,7 +100,7 @@ const Personal_Info = async (req, res) => {
       }
 
       try {
-        let doctor = await Doctor.findOne({ userId });
+        let doctor = await Doctor.findOne({ userId});
 
         if (doctor) {
           doctor = await doctor.updateOne({ date_of_birth, gender, nationality, address, Bio, image: req.file.path });
@@ -113,7 +121,7 @@ const Personal_Info = async (req, res) => {
 };
 
 // Professional Info
-const Professional_Info = async (req, res) => {
+const Professional_Info = async (req, res,userId) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId);
@@ -152,7 +160,7 @@ const Professional_Info = async (req, res) => {
 };
 
 // Specialization Info
-const Specialization_Info = async (req, res) => {
+const Specialization_Info = async (req, res,userId) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId);
@@ -191,7 +199,7 @@ const Specialization_Info = async (req, res) => {
 };
 
 // Identification Info
-const Identification_Info = async (req, res) => {
+const Identification_Info = async (req, res,userId) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId);

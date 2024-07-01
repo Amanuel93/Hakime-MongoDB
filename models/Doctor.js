@@ -97,7 +97,19 @@ const DoctorSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  appointments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Appointment'
+}],
+  schedules: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Schedule'
+}],
+  reviews: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Review'
+}],
 });
 
 const Doctor = mongoose.model('Doctor', DoctorSchema);

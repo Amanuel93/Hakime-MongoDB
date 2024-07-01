@@ -15,6 +15,10 @@ const PatientSchema = new Schema({
     type: String,
     required: false
   },
+  appointments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Appointment'
+}],
   userId: {
     type: Schema.Types.ObjectId, // Referencing the User model
     ref: 'User',

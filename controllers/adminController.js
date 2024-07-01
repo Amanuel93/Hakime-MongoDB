@@ -4,6 +4,7 @@ const Doctor = require('../models/Doctor');
 const Schedule = require('../models/Schedule');
 const Appointment = require('../models/Appointment');
 const Review = require('../models/Review');
+const mongoose = require('mongoose');
 
 module.exports.getPatientProfile = async (req, res) => {
     try {
@@ -28,11 +29,15 @@ module.exports.getDoctorProfile = async (req, res) => {
   try {
       const { id } = req.params;
       // Retrieve a single doctor with their associated user information, schedule, reviews, and appointments
+
+      // Check if the id is a valid ObjectId
+    
       const doctor = await Doctor.findById(id)
           .populate('userId', 'name email phone_number') // Populate user details
           .populate('schedules', 'day hour minute period') // Populate schedule details
           .populate('reviews', 'doctorId patientId userId name image review_text rating') // Populate reviews
           .populate('appointments', 'patientId doctorId reason day time status duration hourly_rate'); // Populate appointments
+
       if (!doctor) {
           return res.status(404).json({ message: 'Doctor not found' });
       }
@@ -48,7 +53,8 @@ module.exports.getAllPatient = async (req, res) => {
   try {
       // Retrieve all patients with their associated user information
       const patients = await Patient.find()
-          .populate('userId', 'name email phone_number');
+          .populate('userId', 'name email phone_number')
+          .populate('appointments', 'patientId doctorId reason day time status duration hourly_rate'); // Populate appointments
 
       res.status(200).json(patients);
   } catch (error) {
