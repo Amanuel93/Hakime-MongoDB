@@ -10,7 +10,7 @@ module.exports.getPatientProfile = async (req, res) => {
         const { id } = req.params;
         // Retrieve a single patient with their associated user information and appointments
         const patient = await Patient.findById(id)
-            .populate('user', 'name email') // Populate user details
+            .populate('userId', 'name email phone_number') // Populate user details
             .populate('appointments', 'patientId doctorId reason day time status duration hourly_rate'); // Populate appointments
 
         if (!patient) {
@@ -29,7 +29,7 @@ module.exports.getDoctorProfile = async (req, res) => {
       const { id } = req.params;
       // Retrieve a single doctor with their associated user information, schedule, reviews, and appointments
       const doctor = await Doctor.findById(id)
-          .populate('user', 'name email') // Populate user details
+          .populate('userId', 'name email phone_number') // Populate user details
           .populate('schedules', 'day hour minute period') // Populate schedule details
           .populate('reviews', 'doctorId patientId userId name image review_text rating') // Populate reviews
           .populate('appointments', 'patientId doctorId reason day time status duration hourly_rate'); // Populate appointments
@@ -48,7 +48,7 @@ module.exports.getAllPatient = async (req, res) => {
   try {
       // Retrieve all patients with their associated user information
       const patients = await Patient.find()
-          .populate('userId', 'name email');
+          .populate('userId', 'name email phone_number');
 
       res.status(200).json(patients);
   } catch (error) {
@@ -60,7 +60,7 @@ module.exports.getAllDoctor = async (req, res) => {
   try {
       // Retrieve all doctors with their associated user information
       const doctors = await Doctor.find()
-          .populate('userId', 'name email');
+          .populate('userId', 'name email phone_number');
 
       res.status(200).json(doctors);
   } catch (error) {
