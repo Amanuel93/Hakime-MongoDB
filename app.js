@@ -23,7 +23,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with the actual origin you want to allow
+  origin: 'https://hakme.netlify.app', // Replace with the actual origin you want to allow
   methods: 'GET,POST,PUT,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 };
