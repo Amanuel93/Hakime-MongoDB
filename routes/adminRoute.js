@@ -28,7 +28,7 @@ router.patch('/updateProfile',checkAuth, updateProfile);
 router.post('/posts', checkAuth, createPost);
 router.put('/posts/:id', checkAuth, updatePost);
 router.delete('/posts/:id', checkAuth, deletePost);
-router.get('/getPost/:id',checkAuth, getPost)
-router.get('/getAllPost',checkAuth, getAllPost)
+router.get('/getPost/:id',checkAuth, getPost);
+router.get('/getAllPost',checkAuth, getAllPost);
 
 module.exports = router;

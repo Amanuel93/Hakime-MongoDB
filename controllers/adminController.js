@@ -75,19 +75,21 @@ module.exports.getAllDoctor = async (req, res) => {
   }
 };
 
-module.exports.approveDoctor = async (id) => {
+module.exports.approveDoctor = async (req,res) => {
   try {
-      const doctor = await Doctor.findByIdAndUpdate(id, { status: 'approved' });
-      return doctor;
+    const { id } = req.params;
+    const doctor = await Doctor.findByIdAndUpdate(id, { status: 'approved' });
+    res.status(200).json({ message:'doctor has been approved successfully',doctor });
   } catch (error) {
       console.error('Error approving doctor:', error);
       throw error;
   }
 };
-module.exports.disapproveDoctor = async (id) => {
+module.exports.disapproveDoctor = async (req,res) => {
   try {
+      const { id } = req.params;
       const doctor = await Doctor.findByIdAndUpdate(id, { status: 'not approved' });
-      return doctor;
+      res.status(200).json({ message:'doctor has been disapproved successfully',doctor });
   } catch (error) {
       console.error('Error disapproving doctor:', error);
       throw error;
@@ -104,7 +106,8 @@ module.exports.getApprovedDoctors = async (req, res) => {
 };
 module.exports.getnot_ApprovedDoctors = async (req, res) => {
   try {
-    const notApprovedDoctors = await Doctor.find({ status: 'not approved' });
+    const notApprovedDoctors = await Doctor.find({ status: 'not approved' })
+    .populate('userId', 'name phone_number');
     res.status(200).json(notApprovedDoctors);
   } catch (error) {
     console.error('Error fetching not approved doctors:', error);

@@ -1,20 +1,27 @@
 // Example controller function to create a new post
 const Post = require('../models/Post');
 const User = require('../models/User');
+const mongoose = require('mongoose');
+const { uploadImage,uploadId_Image,uploadCV,uploadCertificate } = require('../middleware/multerMiddleware');
 
 const createPost = async (req, res) => {
-  const decoded = req.userData;
-  const Id = decoded.id;
+  // const decoded = req.userData;
+  // const userId = decoded.id;
+
   try {
     uploadImage(req, res, async function (err) {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
+
+      const decoded = req.userData;
+      const userId = decoded.id;
+
       const { title, sub_title, content } = req.body;
       const image = req.file ? req.file.path : null;
 
       const post = new Post({
-        userId: mongoose.Types.ObjectId(Id),
+        userId , // Correct usage of ObjectId constructor
         title,
         sub_title,
         content,
@@ -27,6 +34,7 @@ const createPost = async (req, res) => {
       res.status(201).json(post);
     });
   } catch (error) {
+    console.error('Error creating post:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -57,7 +65,7 @@ const getPost = async (req, res) => {
 // Update a post by ID
 const updatePost = async (req, res) => {
   try {
-    uploadImage.single('image')(req, res, async (err) => {
+    uploadImage(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
@@ -92,8 +100,8 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    await post.remove();
-    res.status(204).send();
+    await post.deleteOne();
+    res.status(200).send({message:'Post deleted successfully'});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
